@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
@@ -12,5 +12,8 @@
 	<h3>Toidangtimhieuvegit</h3>
 	<h4>chungtoico3thanhvien</h4>
 	<h5>Toila1nguoidungkhac</h5>
+	<h5>Ly bị khùng</h5>
+	<h5>Code này là của kao</h5>
+	<h5>An Lê đẹp trai vcl</h5>
 </body>
 </html>
