@@ -1,5 +1,9 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -224,12 +228,12 @@ th, td {
 }
 
 tbody tr:nth-child(even) {
-	background-color: #f2f2f2;
+	background-color: #f7f7f7;
 }
 
 tbody tr:hover {
-	background-color: #f1f1f1;
-}
+	background-color: #dfdfdf;
+} 
 
 .profile-pic {
 	width: 30px;
@@ -327,12 +331,17 @@ tbody tr:hover {
 						</tr>
 					</thead>
 					<tbody>
+					<%
+						ArrayList<RoomDTO> roomList = (ArrayList<RoomDTO>) request.getAttribute("roomDtoList");
+						for(int i = 0; i < roomList.size(); i++)
+						{
+					%>
 						<tr>
-							<td>A101</td>
-							<td>Có điều hòa</td>
-							<td>6</td>
-							<td>4/6</td>
-							<td>700000</td>
+							<td><%=roomList.get(i).getRoom_id()%></td>
+							<td><%=roomList.get(i).getType()%></td>
+							<td><%=roomList.get(i).getCapacity()%></td>
+							<td><%=roomList.get(i).getState()%></td>
+							<td><%=roomList.get(i).getPrice()%></td>
 							<td>
 								<div class="button-group">
 									<button class="edit-btn">Sửa</button>
@@ -340,20 +349,9 @@ tbody tr:hover {
 								</div>
 							</td>
 						</tr>
-						<tr>
-							<td>A102</td>
-							<td>Không điều hòa</td>
-							<td>4</td>
-							<td>Full</td>
-							<td>500000</td>
-							<td>
-								<div class="button-group">
-									<button class="edit-btn">Sửa</button>
-									<button class="delete-btn">Xóa</button>
-								</div>
-							</td>
-						</tr>
-
+					<%
+						}
+					%>
 					</tbody>
 				</table>
 			</div>
@@ -364,9 +362,19 @@ tbody tr:hover {
         const currentMonthElement = document.getElementById('current-month');
         const prevMonthBtn = document.getElementById('prev-month');
         const nextMonthBtn = document.getElementById('next-month');
-
+		
         let currentDate = new Date();
-
+        
+        <%
+        	String month = (String) request.getAttribute("month");
+        	String year = (String) request.getAttribute("year");
+        	if(month != null) {
+        %>
+        	currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);	
+       	<%
+        	}
+       	%>
+        
         const updateMonthDisplay = () => {
             const monthNames = [
                 "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5",
@@ -375,15 +383,19 @@ tbody tr:hover {
             ];
             currentMonthElement.textContent = monthNames[currentDate.getMonth()] + ", " + currentDate.getFullYear();
         };
+        
+        
 
         prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
-            updateMonthDisplay();
+        	window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewallroom&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
+
+            
         });
 
         nextMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
-            updateMonthDisplay();
+        	window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewallroom&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
         });
 
         function setupAddRoomButton() {
@@ -447,13 +459,12 @@ tbody tr:hover {
 
             sortOptions.addEventListener('change', handleSortChange);
         };
-
+		
         document.addEventListener('DOMContentLoaded', () => {
-            addRowClickListener();
-            setupAddRoomButton();
-            setupTableSorting();
-            updateMonthDisplay();
+            addRowClickListener(),
+            setupAddRoomButton(),
+            setupTableSorting(),
+            updateMonthDisplay()
         });
-
     </script>
 </html>
