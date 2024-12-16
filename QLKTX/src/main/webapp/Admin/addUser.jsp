@@ -65,7 +65,7 @@ td {
 	vertical-align: auto;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
 	width: 100%;
 	padding: 10px;
 	font-size: 1rem;
@@ -116,6 +116,15 @@ input[type="text"]:focus, select:focus {
 	outline: none;
 }
 
+select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
 @media ( max-width : 600px) {
 	h2 {
 		font-size: 1.5rem;
@@ -127,34 +136,40 @@ input[type="text"]:focus, select:focus {
 </style>
 </head>
 <body>
-	<a href="showAllUser.jsp" class="back-button">← Back</a>
+	<a href="<%= request.getContextPath() %>/UserController?action=viewalluser" class="back-button">← Back</a>
 	<div class="form-container">
 		<h2>Tạo một tài khoản mới</h2>
-		<form action="" method="" onsubmit="validateForm(event)">
+		<form action="<%=request.getContextPath()%>/UserController?action=adduserhandle" method="post" onsubmit="validateForm(event)">
 			<table>
+				<tr>
+					<td><label for="userid">Mã người dùng</label></td>
+					<td colspan="3"><input type="text" name="userid" id="userid" value="" required></td>
+				</tr>
 				<tr>
 					<td><label for="username">Tên đăng nhập</label></td>
 					<td><input type="text" name="username" id="username" value=""
 						required /></td>
 					<td><label for="password">Mật khẩu</label></td>
-					<td><input type="text" name="password" id="password" value=""
+					<td><input type="password" name="password" id="password" value=""
 						required /></td>
 				</tr>
 				<tr>
 					<td><label for="ho">Họ</label></td>
-					<td><input type="text" name="ho" id="ho" value="" /></td>
-					<td><label for="ten">Tên</label></td>
-					<td><input type="text" name="ten" id="ten" value="" /></td>
+					<td><input type="text" name="firstname" id="ho" value="" /></td>
+					
+					<td><label for="gioitinh">Giới tính</label></td>
+					<td><select name="gender">
+						<option value="Nam">Nam</option>
+						<option value="Nữ">Nữ</option>
+					</select></td>
 				</tr>
 				<tr>
-					<td><label for="ngaysinh">Ngày sinh</label></td>
-					<td><input type="text" name="ngaysinh" value="" /></td>
-					<td><label for="gioitinh">Giới tính</label></td>
-					<td><input type="text" name="gioitinh" value="" /></td>
+					<td><label for="ten">Tên</label></td>
+					<td colspan="3"><input type="text" name="lastname" id="ten" value="" /></td>
 				</tr>
 				<tr>
 					<td><label for="sdt">Số điện thoại</label></td>
-					<td><input type="text" name="sdt" value="" /></td>
+					<td><input type="text" name="phonenumber" value="" /></td>
 					<td><label for="cccd">CCCD</label></td>
 					<td><input type="text" name="cccd" value="" /></td>
 				</tr>

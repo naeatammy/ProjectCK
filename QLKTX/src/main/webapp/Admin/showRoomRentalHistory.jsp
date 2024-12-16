@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -167,7 +170,7 @@ img {
 </style>
 </head>
 <body>
-	<a href="showAllUser.jsp" class="back-button">← Back</a>
+	<a href="<%= request.getContextPath() %>/UserController?action=viewalluser" class="back-button">← Back</a>
 	<h2>LỊCH SỬ THUÊ PHÒNG</h2>
 	<div class="form-container">
 		<table>
@@ -198,7 +201,7 @@ img {
 			<caption>DANH SÁCH CÁC HỢP ĐỒNG</caption>
 			<thead>
 				<tr>
-					<th>STT</th>
+					<th>Mã hợp đồng</th>
 					<th>Từ</th>
 					<th>Đến</th>
 					<th>Thời gian</th>
@@ -208,28 +211,25 @@ img {
 				</tr>
 			</thead>
 			<tbody>
+			<%
+				ArrayList<Contract> contractList = (ArrayList<Contract>) request.getAttribute("contractList");
+				for(Contract contract : contractList)
+				{
+			%>
 				<tr>
-					<td>1</td>
-					<td>01/03/2024</td>
-					<td>31/05/2024</td>
-					<td>3 tháng</td>
-					<td>A202</td>
-					<td>Hết hạn</td>
+					<td><%=contract.getUser_id()%></td>
+					<td><%=contract.getStart()%></td>
+					<td><%=contract.getEnd()%></td>
+					<td><%=contract.getDuration()%> tháng</td>
+					<td><%=contract.getRoom_id()%></td>
+					<td><%=contract.getState()%></td>
 					<td>
 						<button class="extend-btn">Gia hạn</button>
 					</td>
 				</tr>
-				<tr>
-					<td>2</td>
-					<td>28/02/2024</td>
-					<td>01/12/2023</td>
-					<td>3 tháng</td>
-					<td>A202</td>
-					<td>Hết hạn</td>
-					<td>
-						<button class="extend-btn">Gia hạn</button>
-					</td>
-				</tr>
+			<%
+				}
+			%>
 			</tbody>
 		</table>
 	</div>

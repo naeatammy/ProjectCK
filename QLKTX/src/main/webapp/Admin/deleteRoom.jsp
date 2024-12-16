@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -122,39 +125,80 @@ input[type="text"]:focus, select:focus {
 </style>
 </head>
 <body>
-	<a href="showAllRoom.jsp" class="back-button">← Back</a>
+	<%
+		Calendar calendar = Calendar.getInstance();
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int year = calendar.get(Calendar.YEAR);
+	%>
+	<a href="<%= request.getContextPath() %>/RoomController?action=viewallroom&month=<%=month%>&year=<%=year%>" class="back-button">← Back</a>
     <div class="form-container">
         <h2>Xóa phòng</h2>
-        <form action="" method="post" onsubmit="return validateForm()">
+        <form action="RoomController?action=deleteroomhandle" method="post" onsubmit="return validateForm()">
+            <%
+        		Room room = (Room) request.getAttribute("room");
+        	%>
             <table>
                 <tr>
                     <td><label for="sophong">Số phòng</label></td>
-                    <td><input type="text" name="sophong" id="sophong" value="A101" required readonly /></td>
+                    <td><input type="text" name="roomid" id="sophong" value="<%=room.getRoom_id()%>" required readonly /></td>
                 </tr>
                 <tr>
                     <td><label for="loaiphong">Loại phòng</label></td>
                     <td>
-                        <select name="loaiphong_display" id="loaiphong" required disabled>
-                            <option value="nam" selected>Nam</option>
-                            <option value="nu">Nữ</option>
+                        <select name="" id="loaiphong" required disabled>
+                        	<%
+                        		if(room.getType().equals("Nam"))
+                        		{
+                        	%>
+	                            <option value="Nam" selected>Nam</option>
+	                            <option value="Nữ">Nữ</option>
+                            <%
+                        		} else {
+                        			
+                            %>
+	                            <option value="Nam">Nam</option>
+	                            <option value="Nữ" selected>Nữ</option>
+                            <%
+                        		}
+                            %>
                         </select>
-                        <input type="hidden" name="loaiphong" value="nam" />
+                        <input type="hidden" name="type" value="<%=room.getType()%>" />
                     </td>
                 </tr>
                 <tr>
                     <td><label for="succhua">Sức chứa</label></td>
                     <td>
-                        <select name="succhua_display" id="succhua" required disabled>
-                            <option value="4" selected>4</option>
-                            <option value="6">6</option>
-                            <option value="8">8</option>
+                        <select name="" id="succhua" required disabled>
+                        	<%
+                        		if(room.getCapacity() == 4)
+                        		{
+                        	%>
+	                            <option value="4" selected>4</option>
+	                            <option value="6">6</option>
+	                            <option value="8">8</option>
+                            <%
+                        		} else if(room.getCapacity() == 6) {
+                        			
+                            %>
+                          		<option value="4">4</option>
+	                            <option value="6" selected>6</option>
+	                            <option value="8">8</option>
+                            <%
+                        		} else {
+                            %>
+	                            <option value="4">4</option>
+	                            <option value="6">6</option>
+	                            <option value="8" selected>8</option>
+                            <%
+                        		}
+                            %>
                         </select>
-                        <input type="hidden" name="succhua" value="4" />
+                        <input type="hidden" name="capacity" value="<%=room.getCapacity()%>" />
                     </td>
                 </tr>
                 <tr>
                     <td><label for="gia">Giá</label></td>
-                    <td><input type="text" name="gia" id="gia" value="500000" required readonly/></td>
+                    <td><input type="text" name="price" id="gia" value="<%=room.getPrice()%>" required /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><input type="submit" value="Xóa" /></td>

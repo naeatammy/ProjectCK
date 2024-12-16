@@ -481,7 +481,7 @@ tbody tr:hover {
                 const status = row.cells[3].textContent.trim(); 
 
                 if (status.includes('0')) {
-                    window.location.href = `./Admin/deleteRoom.jsp?roomId=roomId`;
+                    window.location.href = "<%=request.getContextPath()%>/RoomController?action=deleteroom&roomid="+roomId+""; 
                 } else {
                     alert('Chỉ có thể xóa các phòng trống!');
                 }
