@@ -467,5 +467,30 @@ tbody tr:hover {
             setupTableSorting(),
             updateMonthDisplay()
         });
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(button => {
+            button.addEventListener('click', event => {
+                event.stopPropagation();
+                const row = button.closest('tr');
+                const roomId = row.cells[0].textContent.trim();
+                window.location.href = `./Admin/editRoom.jsp?roomId=roomId`;
+            });
+        });
+
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', event => {
+                event.stopPropagation();
+                const row = button.closest('tr');
+                const roomId = row.cells[0].textContent.trim();
+                const status = row.cells[3].textContent.trim(); 
+
+                if (status.includes('0')) {
+                    window.location.href = `./Admin/deleteRoom.jsp?roomId=roomId`;
+                } else {
+                    alert('Chỉ có thể xóa các phòng trống!');
+                }
+            });
+        });
     </script>
 </html>
