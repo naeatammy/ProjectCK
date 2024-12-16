@@ -53,7 +53,7 @@ input[type="text"], input[type="password"] {
 	margin-top: 10px;
 }
 
-input[type="button"] {
+input[type="submit"],input[type="button"] {
 	background-color: #add8e6;
 	color: white;
 	padding: 10px;
@@ -64,7 +64,7 @@ input[type="button"] {
 	width: 48%;
 }
 
-input[type="button"]:hover {
+input[type="submit"],input[type="button"]]:hover {
 	background-color: #87cefa;
 }
 
@@ -72,7 +72,7 @@ input[type="button"]:hover {
 	form {
 		padding: 10px;
 	}
-	input[type="button"] {
+	input[type="submit"],input[type="button"]] {
 		width: 100%;
 		margin: 5px 0;
 	}
@@ -83,7 +83,7 @@ input[type="button"]:hover {
 </style>
 </head>
 <body>
-	<form name="login">
+	<form name="login" action="CheckLoginServlet">
 		<h3>ĐĂNG NHẬP</h3>
 		<table>
 			<tr>
@@ -97,9 +97,15 @@ input[type="button"]:hover {
 			</tr>
 		</table>
 		<div class="button-container">
-			<input type="button" onclick="dangnhap()" value="OK"> <input
-				type="button" value="Reset">
+			<input type="submit" value="OK"> 
+			<input type="button" onclick="reset()" value="Reset">
 		</div>
 	</form>
 </body>
+<script type="text/javascript">
+	function reset() {
+		document.getElementById("username").value = "";
+		document.getElementById("password").value = "";
+	}
+</script>
 </html>
