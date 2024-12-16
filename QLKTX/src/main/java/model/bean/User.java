@@ -2,11 +2,24 @@ package model.bean;
 
 public class User {
 	private String user_id;
+	private String username;
+	private String password;
 	private String firstname;
 	private String lastname;
 	private String phonenumber;
 	private String cccd;
 	private boolean male;
+	public User(String user_id, String username, String password, String firstname, String lastname, String phonenumber, String cccd, boolean male) {
+		super();
+		this.user_id = user_id;
+		this.username = username;
+		this.password = password;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.phonenumber = phonenumber;
+		this.cccd = cccd;
+		this.male = male;
+	}
 	public User(String user_id, String firstname, String lastname, String phonenumber, String cccd, boolean male) {
 		super();
 		this.user_id = user_id;
@@ -51,5 +64,17 @@ public class User {
 	}
 	public void setMale(boolean male) {
 		this.male = male;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

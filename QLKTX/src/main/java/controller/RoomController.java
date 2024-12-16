@@ -123,6 +123,35 @@ public class RoomController extends HttpServlet {
 			request.getRequestDispatcher("Admin/showAllRoom.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("deleteroom")) {
+			String room_id = request.getParameter("roomid");
+			Room room = roomBO.getRoomById(room_id);
+			request.setAttribute("room", room);
+			request.getRequestDispatcher("Admin/deleteRoom.jsp").forward(request, response);
+		}
+		if(action.equals("deleteroomhandle")) {
+			String room_id = request.getParameter("roomid");
+			boolean isDeleted = roomBO.deleteRoom(room_id);
+			if(isDeleted) {
+				System.out.println("Delete Success");
+			} else {
+				System.out.println("Delete Failed");
+			}
+			Calendar calendar = Calendar.getInstance();
+			int month = calendar.get(Calendar.MONTH) + 1;
+			int year = calendar.get(Calendar.YEAR);
+			ArrayList<Room> roomList = roomBO.getAllRoom();	
+			ArrayList<RoomDTO> roomDtoList = new ArrayList<RoomDTO>();
+			for (Room room : roomList) {
+				String state = recordBO.countRecord(month, year, room.getRoom_id()) + "/" + room.getCapacity();
+				roomDtoList.add(new RoomDTO(room.getRoom_id(), room.getType(), room.getCapacity(), state, room.getPrice()));
+			}
+			request.setAttribute("roomDtoList", roomDtoList);
+			request.setAttribute("month", Integer.toString(month));
+			request.setAttribute("year", Integer.toString(year));
+			request.getRequestDispatcher("Admin/showAllRoom.jsp").forward(request, response);
+			return;
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

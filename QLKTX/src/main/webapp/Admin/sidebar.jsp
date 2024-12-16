@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,8 +58,13 @@ a {
 	<div class="sidebar">
 		<h3>Quản lý ký túc xá</h3>
 		<ul>
-			<li class="active" data-page="showAllRoom.jsp">Quản lý phòng</li>
-			<li data-page="showAllUser.jsp">Quản lý tài khoản</li>
+			<%
+				Calendar calendar = Calendar.getInstance();
+				int month = calendar.get(Calendar.MONTH) + 1;
+				int year = calendar.get(Calendar.YEAR);
+			%>
+			<li class="active" data-page="<%= request.getContextPath() %>/RoomController?action=viewallroom&month=<%=month%>&year=<%=year%>">Quản lý phòng</li>
+			<li data-page="<%= request.getContextPath() %>/UserController?action=viewalluser">Quản lý tài khoản</li>
 			<li data-page="showAllContract.jsp">Quản lý hợp đồng</li>
 			<li id="logout">Đăng xuất</li>
 		</ul>

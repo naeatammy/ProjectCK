@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -300,53 +303,34 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
+                            <th>Mã người dùng</th>
                             <th>Họ</th>
                             <th>Tên</th>
                             <th>Giới tính</th>
-                            <th>Ngày sinh</th>
                             <th>Số điện thoại</th>
                             <th>CCCD</th>
                             <th>Tùy chọn</th>
                         </tr>
                     </thead>
                     <tbody>
+                    <%
+                    	ArrayList<User> userList = (ArrayList<User>) request.getAttribute("userList");
+                    	for(int i = 0; i < userList.size(); i++) {
+                    %>
                         <tr>
-                            <td>1</td>
-                            <td>Nguyễn Đắc Nguyên</td>
-                            <td>Tâm</td>
-                            <td>Nam</td>
-                            <td>03/03/2004</td>
-                            <td>0123456789</td>
-                            <td>04739384482929</td>
+                            <td><%=userList.get(i).getUser_id()%></td>
+                            <td><%=userList.get(i).getFirstname()%></td>
+                            <td><%=userList.get(i).getLastname()%></td>
+                            <td><%=userList.get(i).isMale() ? "Nam" : "Nữ"%></td>
+                            <td><%=userList.get(i).getPhonenumber()%></td>
+                            <td><%=userList.get(i).getCccd()%></td>
                             <td>
-                                <button class="history-btn" data-user-id="1">Xem lịch sử thuê</button>
+                                <button class="history-btn" data-user-id="1" onclick="contractHistory('<%=userList.get(i).getUser_id()%>')">Xem lịch sử thuê</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Trần Văn</td>
-                            <td>An</td>
-                            <td>Nam</td>
-                            <td>02/02/2004</td>
-                            <td>0987654321</td>
-                            <td>04836284653822</td>
-                            <td>
-                                <button class="history-btn" data-user-id="2">Xem lịch sử thuê</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Lê Tôn Thanh</td>
-                            <td>An</td>
-                            <td>Nam</td>
-                            <td>01/01/2004</td>
-                            <td>0463625848</td>
-                            <td>04846284573920</td>
-                            <td>
-                                <button class="history-btn" data-user-id="3">Xem lịch sử thuê</button>
-                            </td>
-                        </tr>
+                    <%
+                    	}
+                    %>
                     </tbody>
                 </table>
             </div>
@@ -354,6 +338,9 @@
     </div>
 </body>
 <script>
+		function contractHistory(user_id) {
+			window.location.href = "<%=request.getContextPath()%>/UserController?action=contracthistory&userid=" + user_id;
+		}
         const currentMonthElement = document.getElementById('current-month');
         const prevMonthBtn = document.getElementById('prev-month');
         const nextMonthBtn = document.getElementById('next-month');
@@ -382,19 +369,7 @@
         function setupAddUserButton() {
             const addRoomButton = document.getElementById('add-user');
             addRoomButton.addEventListener('click', () => {
-                window.location.href = 'addUser.jsp';
-            });
-        }
-
-        function setupHistoryButtonListeners() {
-            const historyButtons = document.querySelectorAll('.history-btn');
-
-            historyButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const userId = this.getAttribute('data-user-id');
-
-                    window.location.href = `showRoomRentalHistory.jsp?userId=userId`;
-                });
+                window.location.href = "<%=request.getContextPath()%>/UserController?action=adduser";
             });
         }
 
@@ -431,7 +406,6 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            setupHistoryButtonListeners();
             setupAddUserButton();
             setupTableSorting();
             updateMonthDisplay();

@@ -62,4 +62,18 @@ public class UserDAO {
 		}
 	}
 	
+	public boolean addUser(User user) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			Connection conn = DriverManager.getConnection(url, "root", "");
+			Statement sm = conn.createStatement();
+			String sql = "INSERT INTO `user`(`id`, `username`, `password`, `firstname`, `lastname`, `phonenumber`, `cccd`, `gender`) VALUES ('"+user.getUser_id()+"','"+user.getUsername()+"','"+user.getPassword()+"','"+user.getFirstname()+"','"+user.getLastname()+"','"+user.getPhonenumber()+"','"+user.getCccd()+"',"+user.isMale()+")";
+			int rowAffected = sm.executeUpdate(sql);
+			return rowAffected > 0;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
 }
