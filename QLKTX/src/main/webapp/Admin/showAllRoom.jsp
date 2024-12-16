@@ -370,7 +370,8 @@ tbody tr:hover {
         	String year = (String) request.getAttribute("year");
         	if(month != null) {
         %>
-        	currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);	
+        	currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);
+        	currentDate.setFullYear(<%=Integer.parseInt(year)%>)
        	<%
         	}
        	%>
@@ -401,7 +402,7 @@ tbody tr:hover {
         function setupAddRoomButton() {
             const addRoomButton = document.getElementById('add-user');
             addRoomButton.addEventListener('click', () => {
-                window.location.href = 'addRoom.jsp';
+                window.location.href = "<%= request.getContextPath() %>/RoomController?action=addroom";
             });
         }
 
@@ -414,7 +415,7 @@ tbody tr:hover {
                     if (!isButton) {
                         const roomNumber = row.cells[0].textContent.trim();
 
-                        window.location.href = `showOneRoom.jsp?roomNumber=${roomNumber}`;
+                        window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewdetailroom&roomid=" + roomNumber + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
                     }
                 });
             });

@@ -26,4 +26,19 @@ public class RoomDAO {
 		}
 		return roomList;
 	}
+	
+	public boolean addRoom(Room room) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			Connection conn = DriverManager.getConnection(url, "root", "");
+			Statement sm = conn.createStatement();
+			String sql = "INSERT INTO `room`(`room_id`, `type`, `capacity`, `price`) VALUES ('"+room.getRoom_id()+"','"+room.getType()+"','"+room.getCapacity()+"','"+room.getPrice()+"')";
+			int rowAffected = sm.executeUpdate(sql);
+			return rowAffected > 0;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
 }
