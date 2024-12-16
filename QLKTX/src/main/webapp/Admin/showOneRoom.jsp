@@ -413,5 +413,58 @@ img {
         };
         sortTable(columns[selectedOption]);
     });
+    function initializePaymentTable() {
+        const paymentCells = document.querySelectorAll('tbody td img');
+        const originalStates = [];
+
+        function saveOriginalState() {
+            originalStates.length = 0;
+            paymentCells.forEach(cell => {
+                originalStates.push({
+                    src: cell.src,
+                    alt: cell.alt
+                });
+            });
+        }
+
+        paymentCells.forEach((cell) => {
+            cell.addEventListener('click', () => {
+                if (cell.alt === 'no') {
+                    cell.src = '../image/tick.png';
+                    cell.alt = 'yes';
+                } else {
+                    alert('Bạn không thể thay đổi ô này từ tick xanh sang trạng thái khác!');
+                }
+            });
+        });
+
+        function saveTableState() {
+            const updatedStates = paymentCells.map(cell => ({ src: cell.src, alt: cell.alt }));
+            console.log('Lưu trạng thái:', updatedStates);
+            alert('Trạng thái đã được lưu! (Giả lập - cần thêm logic lưu vào DB)');
+        }
+
+        function restoreOriginalState() {
+            paymentCells.forEach((cell, index) => {
+                cell.src = originalStates[index].src;
+                cell.alt = originalStates[index].alt;
+            });
+            alert('Bảng đã được khôi phục trạng thái ban đầu.');
+        }
+
+        const saveButtons = document.querySelectorAll('.save-btn');
+        saveButtons.forEach((button) => {
+            button.addEventListener('click', saveTableState);
+        });
+
+        const cancelButtons = document.querySelectorAll('.cancel-btn');
+        cancelButtons.forEach((button) => {
+            button.addEventListener('click', restoreOriginalState);
+        });
+
+
+        saveOriginalState();
+    }
+    initializePaymentTable();
 </script>
 </html>
