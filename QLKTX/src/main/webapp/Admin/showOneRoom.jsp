@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -199,19 +202,23 @@ img {
 <body>
 	<h2>CHI TIẾT PHÒNG</h2>
 	<div class="form-container">
+		<%
+			Room room = (Room) request.getAttribute("room");
+			String state = (String) request.getAttribute("state");
+		%>
 		<table>
 			<tr>
 				<td><label for="sophong">Số Phòng</label></td>
-				<td><input type="text" id="sophong" value="A101" disabled></td>
+				<td><input type="text" id="sophong" value="<%=room.getRoom_id()%>" disabled></td>
 			</tr>
 			<tr>
 				<td><label for="loaiphong">Loại Phòng</label></td>
-				<td><input type="text" id="loaiphong" value="Có điều hòa"
+				<td><input type="text" id="loaiphong" value="<%=room.getType()%>"
 					disabled></td>
 			</tr>
 			<tr>
 				<td><label for="trangthai">Trạng Thái</label></td>
-				<td><input type="text" id="trangthai" value="4/6" disabled></td>
+				<td><input type="text" id="trangthai" value="<%=state%>" disabled></td>
 			</tr>
 		</table>
 	</div>
@@ -227,7 +234,7 @@ img {
 		<div class="sort-dropdown">
 			<label for="sort-options">Sắp xếp theo:</label> <select
 				id="sort-options">
-				<option value="STT">STT</option>
+				<option value="userid">Mã người dùng</option>
 				<option value="Họ">Họ</option>
 				<option value="Tên">Tên</option>
 				<option value="Giới tính">Giới tính</option>
@@ -241,10 +248,9 @@ img {
 			<caption>DANH SÁCH NGƯỜI THUÊ PHÒNG</caption>
 			<thead>
 				<tr>
-					<th>STT</th>
+					<th>Mã người dùng</th>
 					<th>Họ</th>
 					<th>Tên</th>
-					<th>Giới tính</th>
 					<th>SĐT</th>
 					<th>CCCD</th>
 					<th>Tiền phòng</th>
@@ -255,58 +261,86 @@ img {
 				</tr>
 			</thead>
 			<tbody>
+				<%
+					ArrayList<RoomRecordDTO> recordDtoList = (ArrayList<RoomRecordDTO>) request.getAttribute("recordDtoList");
+					for(int i = 0; i < recordDtoList.size(); i++)
+					{
+				%>
 				<tr>
-					<td>1</td>
-					<td>Nguyễn Văn</td>
-					<td>Bình</td>
-					<td>Nam</td>
-					<td>0123456789</td>
-					<td>048234567929</td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
+					<td><%=recordDtoList.get(i).getUser_id()%></td>
+					<td><%=recordDtoList.get(i).getFirstname()%></td>
+					<td><%=recordDtoList.get(i).getLastname()%></td>
+					<td><%=recordDtoList.get(i).getPhonenumber()%></td>
+					<td><%=recordDtoList.get(i).getCccd()%></td>
+					<td>
+						<%
+							if(recordDtoList.get(i).isRoom())
+							{
+						%>
+							<img src="image/tick.png" alt="yes">
+						<%
+							}
+							else 
+							{
+						%>
+							<img src="image/x.png" alt="no">
+						<%
+							}
+						%>
+					</td>
+					<td>
+						<%
+							if(recordDtoList.get(i).isElectric())
+							{
+						%>
+							<img src="image/tick.png" alt="yes">
+						<%
+							}
+							else 
+							{
+						%>
+							<img src="image/x.png" alt="no">
+						<%
+							}
+						%>
+					</td>
+					<td>
+						<%
+							if(recordDtoList.get(i).isWater())
+							{
+						%>
+							<img src="image/tick.png" alt="yes">
+						<%
+							}
+							else 
+							{
+						%>
+							<img src="image/x.png" alt="no">
+						<%
+							}
+						%>
+					</td>
+					<td>
+						<%
+							if(recordDtoList.get(i).isWifi())
+							{
+						%>
+							<img src="image/tick.png" alt="yes">
+						<%
+							}
+							else 
+							{
+						%>
+							<img src="image/x.png" alt="no">
+						<%
+							}
+						%>
+					</td>
 					<td><button class="delete-btn">Xóa</button></td>
 				</tr>
-				<tr>
-					<td>2</td>
-					<td>Trần Văn</td>
-					<td>An</td>
-					<td>Nam</td>
-					<td>0123456789</td>
-					<td>048234567929</td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><button class="delete-btn">Xóa</button></td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>Lý Văn</td>
-					<td>Công</td>
-					<td>Nam</td>
-					<td>0123456789</td>
-					<td>048234567929</td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/x.png" alt="no"></td>
-					<td><img src="../image/x.png" alt="no"></td>
-					<td><img src="../image/x.png" alt="no"></td>
-					<td><button class="delete-btn">Xóa</button></td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td>Võ Văn</td>
-					<td>Dũng</td>
-					<td>Nam</td>
-					<td>0987654321</td>
-					<td>048234567929</td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><img src="../image/tick.png" alt="yes"></td>
-					<td><button class="delete-btn">Xóa</button></td>
-				</tr>
+				<%
+					}
+				%>
 			</tbody>
 		</table>
 	</div>
@@ -317,24 +351,35 @@ img {
     const nextMonthBtn = document.getElementById('next-month');
 
     let currentDate = new Date();
-
+	
+    <%
+		String month = (String) request.getAttribute("month");
+		String year = (String) request.getAttribute("year");
+		if(month != null) {
+	%>
+		currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);
+		currentDate.setFullYear(<%=Integer.parseInt(year)%>)
+	<%
+		}
+	%>
+    
     const updateMonthDisplay = () => {
         const monthNames = [
             "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5",
             "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9",
             "Tháng 10", "Tháng 11", "Tháng 12"
         ];
-        currentMonthElement.textContent = `${monthNames[currentDate.getMonth()]}, ${currentDate.getFullYear()}`;
+        currentMonthElement.textContent = monthNames[currentDate.getMonth()] + ", " + currentDate.getFullYear();
     };
 
     prevMonthBtn.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
-        updateMonthDisplay();
+        window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewdetailroom&roomid=" + "<%=room.getRoom_id()%>" + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
     });
 
     nextMonthBtn.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
-        updateMonthDisplay();
+        window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewdetailroom&roomid=" + "<%=room.getRoom_id()%>" + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
     });
 
     updateMonthDisplay();
@@ -359,7 +404,7 @@ img {
     sortOptions.addEventListener('change', () => {
         const selectedOption = sortOptions.value;
         const columns = {
-            "STT": 1,
+            "Mã người dùng": 1,
             "Họ": 2,
             "Tên": 3,
             "Giới tính": 4,

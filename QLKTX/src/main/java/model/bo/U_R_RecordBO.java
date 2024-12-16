@@ -17,4 +17,13 @@ public class U_R_RecordBO {
 		}
 		return cnt;
 	}
+	public ArrayList<U_R_Record> getAllRecord(int month, int year, String room_id) {
+		ArrayList<U_R_Record> recordList = new ArrayList<U_R_Record>();
+		for (U_R_Record record : recordDAO.getAllRecord()) {
+			if(month == record.getMonth() && year == record.getYear() && room_id.equals(record.getRoom_id())) {
+				recordList.add(record);
+			}
+		}
+		return recordList;
+	}
 }

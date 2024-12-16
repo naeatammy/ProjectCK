@@ -133,26 +133,26 @@
 	<a href="showAllRoom.jsp" class="back-button">← Back</a>
     <div class="form-container">
         <h2>Thêm phòng</h2>
-        <form action="" method="post" onsubmit="return validateForm()">
+        <form action="../RoomController?action=addroomhandle" method="post" onsubmit="return validateForm()">
             <table>
                 <tr>
                     <td><label for="sophong">Số phòng</label></td>
-                    <td><input type="text" name="sophong" id="sophong" value="" required /></td>
+                    <td><input type="text" name="roomid" id="sophong" value="" placeholder="VD: A101" required /></td>
                 </tr>
                 <tr>
                     <td><label for="loaiphong">Loại phòng</label></td>
                     <td>
-                        <select name="loaiphong" id="loaiphong" required>
+                        <select name="type" id="loaiphong" required>
                             <option value="">-- Chọn loại phòng --</option>
-                            <option value="Có điều hòa">Có điều hòa</option>
-                            <option value="Không điều hòa">Không điều hòa</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="succhua">Sức chứa</label></td>
                     <td>
-                        <select name="succhua" id="succhua" required>
+                        <select name="capacity" id="succhua" required>
                             <option value="">-- Chọn sức chứa --</option>
                             <option value="4">4</option>
                             <option value="6">6</option>
@@ -162,7 +162,7 @@
                 </tr>
                 <tr>
                     <td><label for="gia">Giá</label></td>
-                    <td><input type="text" name="gia" id="gia" value="" required /></td>
+                    <td><input type="text" name="price" id="gia" value="" required /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><input type="submit" value="OK" /> <input type="reset" value="Reset" /></td>
@@ -185,9 +185,9 @@
             return false;
         }
 
-        const validLoaiphong = ["Có điều hòa", "Không điều hòa"];
+        const validLoaiphong = ["Nam", "Nữ"];
         if (!validLoaiphong.includes(loaiphong)) {
-            alert("Loại phòng chỉ được chọn 'Có điều hòa' hoặc 'Không điều hòa'.");
+            alert("Loại phòng chỉ được chọn 'Nam' hoặc 'Nữ'.");
             return false;
         }
 
