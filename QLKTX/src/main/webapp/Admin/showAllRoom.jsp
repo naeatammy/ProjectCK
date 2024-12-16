@@ -344,7 +344,7 @@ tbody tr:hover {
 							<td><%=roomList.get(i).getPrice()%></td>
 							<td>
 								<div class="button-group">
-									<button class="edit-btn">Sửa</button>
+									<button class="edit-btn" onclick="editRoom('<%=roomList.get(i).getRoom_id()%>')">Sửa</button>
 									<button class="delete-btn">Xóa</button>
 								</div>
 							</td>
@@ -467,15 +467,10 @@ tbody tr:hover {
             setupTableSorting(),
             updateMonthDisplay()
         });
-        const editButtons = document.querySelectorAll('.edit-btn');
-        editButtons.forEach(button => {
-            button.addEventListener('click', event => {
-                event.stopPropagation();
-                const row = button.closest('tr');
-                const roomId = row.cells[0].textContent.trim();
-                window.location.href = `./Admin/editRoom.jsp?roomId=roomId`;
-            });
-        });
+       
+        function editRoom(roomid) {
+        	window.location.href = "<%=request.getContextPath()%>/RoomController?action=editroom&roomid="+roomid+""; 
+        }
 
         const deleteButtons = document.querySelectorAll('.delete-btn');
         deleteButtons.forEach(button => {

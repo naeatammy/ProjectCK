@@ -14,7 +14,7 @@ public class UserDAO {
 		ArrayList<User> userList = new ArrayList<User>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "SELECT * FROM user";

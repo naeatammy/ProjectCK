@@ -1,3 +1,4 @@
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -130,7 +131,12 @@
     </style>
 </head>
 <body>
-	<a href="showAllRoom.jsp" class="back-button">← Back</a>
+	<%
+		Calendar calendar = Calendar.getInstance();
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int year = calendar.get(Calendar.YEAR);
+	%>
+	<a href="<%= request.getContextPath() %>/RoomController?action=viewallroom&month=<%=month%>&year=<%=year%>" class="back-button">← Back</a>
     <div class="form-container">
         <h2>Thêm phòng</h2>
         <form action="../RoomController?action=addroomhandle" method="post" onsubmit="return validateForm()">
