@@ -89,6 +89,40 @@ public class RoomController extends HttpServlet {
 			request.getRequestDispatcher("Admin/showAllRoom.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("editroom")) {
+			String room_id = request.getParameter("roomid");
+			Room room = roomBO.getRoomById(room_id);
+			request.setAttribute("room", room);
+			request.getRequestDispatcher("Admin/editRoom.jsp").forward(request, response);
+		}
+		if(action.equals("editroomhandle")) {
+			String room_id = request.getParameter("roomid");
+			String type = request.getParameter("type");
+			String capacity = request.getParameter("capacity");
+			String price = request.getParameter("price");
+			Room roomEdit = new Room(room_id, type, Integer.parseInt(capacity), price);
+			boolean isUpdated = roomBO.updateRoom(roomEdit);
+			if(isUpdated) {
+				System.out.println("Update Success");
+			}
+			else {
+				System.out.println("Update Failed");
+			}
+			Calendar calendar = Calendar.getInstance();
+			int month = calendar.get(Calendar.MONTH) + 1;
+			int year = calendar.get(Calendar.YEAR);
+			ArrayList<Room> roomList = roomBO.getAllRoom();	
+			ArrayList<RoomDTO> roomDtoList = new ArrayList<RoomDTO>();
+			for (Room room : roomList) {
+				String state = recordBO.countRecord(month, year, room.getRoom_id()) + "/" + room.getCapacity();
+				roomDtoList.add(new RoomDTO(room.getRoom_id(), room.getType(), room.getCapacity(), state, room.getPrice()));
+			}
+			request.setAttribute("roomDtoList", roomDtoList);
+			request.setAttribute("month", Integer.toString(month));
+			request.setAttribute("year", Integer.toString(year));
+			request.getRequestDispatcher("Admin/showAllRoom.jsp").forward(request, response);
+			return;
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

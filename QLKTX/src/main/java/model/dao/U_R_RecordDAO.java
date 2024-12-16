@@ -10,7 +10,7 @@ public class U_R_RecordDAO {
 		ArrayList<U_R_Record> recordList = new ArrayList<U_R_Record>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "SELECT * FROM user_room_record";
