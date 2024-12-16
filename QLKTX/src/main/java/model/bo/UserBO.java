@@ -18,4 +18,8 @@ public class UserBO {
 		}
 		return resUser;
 	}
+	
+	public boolean updateUser(User user) {
+		return userDAO.updateUser(user);
+	}
 }

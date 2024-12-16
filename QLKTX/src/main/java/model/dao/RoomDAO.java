@@ -41,4 +41,34 @@ public class RoomDAO {
 			return false;
 		}
 	}
+	
+	public boolean updateRoom(Room room) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			Connection conn = DriverManager.getConnection(url, "root", "");
+			Statement sm = conn.createStatement();
+			String sql = "UPDATE `room` SET `price`='" + room.getPrice() + "' WHERE `room_id` = '" + room.getRoom_id() + "'";
+			int rowAffected = sm.executeUpdate(sql);
+			return rowAffected > 0;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
+	
+	public boolean deleteRoom(String room_id) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			Connection conn = DriverManager.getConnection(url, "root", "");
+			Statement sm = conn.createStatement();
+			String sql = "DELETE FROM `room` WHERE `room_id` = '" + room_id + "'";
+			int rowAffected = sm.executeUpdate(sql);
+			return rowAffected > 0;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
 }

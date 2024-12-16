@@ -23,4 +23,12 @@ public class RoomBO {
 	public boolean addRoom(Room room) {
 		return roomDAO.addRoom(room);
 	}
+	
+	public boolean updateRoom(Room room) {
+		return roomDAO.updateRoom(room);
+	}
+	
+	public boolean deleteRoom(String room_id) {
+		return roomDAO.deleteRoom(room_id);
+	}
 }
