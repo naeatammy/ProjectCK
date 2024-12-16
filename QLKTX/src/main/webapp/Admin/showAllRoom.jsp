@@ -420,51 +420,64 @@ tbody tr:hover {
                 });
             });
         }
-        const setupTableSorting = () => {
+        
+        function setupTableSortingAndSearch() {
             const tableBody = document.querySelector('tbody');
+            const searchInput = document.getElementById('search-input');
+            const searchOptions = document.getElementById('search-options');
             const sortOptions = document.getElementById('sort-options');
+            const tableRows = document.querySelectorAll('tbody tr');
 
-            const sortTable = (criteria) => {
-                const rows = Array.from(tableBody.rows);
+            const filterAndSortTable = () => {
+                const rows = Array.from(tableBody.rows);	
+                const searchValue = searchInput.value.toLowerCase();
+                const searchColumnIndex = {
+                    "Số phòng": 0,
+                    "Loại phòng": 1,
+                    "Sức chứa": 2,
+                    "Giá": 4
+                }[searchOptions.value];
+                const sortColumnIndex = {
+                    "Số phòng": 0,
+                    "Loại phòng": 1,
+                    "Sức chứa": 2,
+                    "Giá": 4
+                }[sortOptions.value];
 
-                rows.sort((rowA, rowB) => {
-                    const cellA = rowA.querySelector(`td:nth-child(${criteria})`).textContent.trim();
-                    const cellB = rowB.querySelector(`td:nth-child(${criteria})`).textContent.trim();
-
-                    let valueA = isNaN(cellA) ? cellA : parseFloat(cellA);
-                    let valueB = isNaN(cellB) ? cellB : parseFloat(cellB);
-
-                    if (criteria === 4) {
-                        valueA = cellA.includes('/') ? parseFloat(cellA.split('/')[0]) : cellA;
-                        valueB = cellB.includes('/') ? parseFloat(cellB.split('/')[0]) : cellB;
+                rows.forEach(row => {
+                    const cellValue = row.cells[searchColumnIndex].textContent.toLowerCase();
+                    if (cellValue.includes(searchValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
                     }
+                });
+                
+                rows.sort((rowA, rowB) => {
+                    const cellA = rowA.cells[sortColumnIndex].textContent.trim();
+                    const cellB = rowB.cells[sortColumnIndex].textContent.trim();
+
+                    const valueA = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
+                    const valueB = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
 
                     return typeof valueA === 'number' && typeof valueB === 'number'
                         ? valueA - valueB
                         : valueA.localeCompare(valueB, undefined, { numeric: true });
                 });
 
+                tableBody.innerHTML = '';
                 rows.forEach(row => tableBody.appendChild(row));
             };
 
-            const handleSortChange = () => {
-                const selectedOption = sortOptions.value;
-                const columns = {
-                    "Số phòng": 1,
-                    "Loại phòng": 2,
-                    "Sức chứa": 3,
-                    "Giá": 5
-                };
-                sortTable(columns[selectedOption]);
-            };
-
-            sortOptions.addEventListener('change', handleSortChange);
-        };
+            searchInput.addEventListener('input', filterAndSortTable);
+            searchOptions.addEventListener('change', filterAndSortTable);
+            sortOptions.addEventListener('change', filterAndSortTable);
+        }
 		
         document.addEventListener('DOMContentLoaded', () => {
             addRowClickListener(),
             setupAddRoomButton(),
-            setupTableSorting(),
+            setupTableSortingAndSearch(),
             updateMonthDisplay()
         });
        
