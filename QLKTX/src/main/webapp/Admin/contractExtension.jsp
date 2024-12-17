@@ -3,6 +3,7 @@
 <%@page import="model.bean.*"%>
 <%@page import="model.dto.*"%>
 <%@page import="java.util.*"%>
+<%@page import="helper.GenerateNewCode"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -150,9 +151,13 @@ select {
 		<form action="<%=request.getContextPath()%>/ContractController?action=addcontract&userid=<%=user.getUser_id()%>" method="post">
 			<table>
 				<tr>
+					<%
+						ArrayList<String> ex_code = (ArrayList<String>) request.getAttribute("code");
+						String code = new GenerateNewCode().generateNewCode(ex_code);
+					%>
 					<td><label for="contractid">Mã hợp đồng</label></td>
 					<td colspan="3"><input type="text" name="contractid" id="hoten"
-						value="" required /></td>
+						value="<%=code%>" required readonly/></td>
 				</tr>
 				<tr>
 					<td><label for="firstname">Họ</label></td>
