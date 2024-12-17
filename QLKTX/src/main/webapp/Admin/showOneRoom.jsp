@@ -56,7 +56,7 @@ input[type="text"] {
 	justify-content: space-between;
 	align-items: center;
 	margin: 20px auto;
-	max-width: 800px;
+	max-width: 300px;
 	gap: 15px;
 }
 
@@ -90,18 +90,6 @@ input[type="text"] {
 	background-color: #2b91b0;
 }
 
-.sort-dropdown {
-	flex: 1 1 200px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-#sort-options {
-	padding: 5px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
 
 .table-container {
 	margin: 20px auto;
@@ -144,25 +132,31 @@ tbody tr:hover {
 	background-color: #f1f1f1;
 }
 
-.delete-btn {
-	background-color: #dc3545;
-	border: none;
-	padding: 8px 12px;
-	color: #fff;
-	font-size: 14px;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: background-color 0.3s;
-}
-
-.delete-btn:hover {
-	background-color: #a71d2a;
-}
-
 img {
 	width: 20px;
 	height: 20px;
 	object-fit: contain;
+}
+
+.button-container {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.save-btn, .cancel-btn {
+	background-color: #3ea4c6;
+	margin: 10px;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	border-radius: 10px;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+}
+
+.save-btn:hover, .cancel-btn:hover {
+	background-color: #2b91b0;
 }
 
 @media ( max-width : 768px) {
@@ -182,7 +176,7 @@ img {
 		font-size: 14px;
 		padding: 6px;
 	}
-	.delete-btn {
+	.save-btn {
 		font-size: 12px;
 		padding: 5px 10px;
 	}
@@ -203,22 +197,24 @@ img {
 	<h2>CHI TIẾT PHÒNG</h2>
 	<div class="form-container">
 		<%
-			Room room = (Room) request.getAttribute("room");
-			String state = (String) request.getAttribute("state");
+		Room room = (Room) request.getAttribute("room");
+		String state = (String) request.getAttribute("state");
 		%>
 		<table>
 			<tr>
 				<td><label for="sophong">Số Phòng</label></td>
-				<td><input type="text" id="sophong" value="<%=room.getRoom_id()%>" disabled></td>
+				<td><input type="text" id="sophong"
+					value="<%=room.getRoom_id()%>" disabled></td>
 			</tr>
 			<tr>
 				<td><label for="loaiphong">Loại Phòng</label></td>
-				<td><input type="text" id="loaiphong" value="<%=room.getType()%>"
-					disabled></td>
+				<td><input type="text" id="loaiphong"
+					value="<%=room.getType()%>" disabled></td>
 			</tr>
 			<tr>
 				<td><label for="trangthai">Trạng Thái</label></td>
-				<td><input type="text" id="trangthai" value="<%=state%>" disabled></td>
+				<td><input type="text" id="trangthai" value="<%=state%>"
+					disabled></td>
 			</tr>
 		</table>
 	</div>
@@ -229,18 +225,6 @@ img {
 				<span id="current-month">Tháng 12, 2024</span>
 				<button id="next-month">Sau</button>
 			</div>
-		</div>
-
-		<div class="sort-dropdown">
-			<label for="sort-options">Sắp xếp theo:</label> <select
-				id="sort-options">
-				<option value="userid">Mã người dùng</option>
-				<option value="Họ">Họ</option>
-				<option value="Tên">Tên</option>
-				<option value="Giới tính">Giới tính</option>
-				<option value="SĐT">SĐT</option>
-				<option value="CCCD">CCCD</option>
-			</select>
 		</div>
 	</div>
 	<div class="table-container">
@@ -257,14 +241,13 @@ img {
 					<th>Điện</th>
 					<th>Nước</th>
 					<th>Wifi</th>
-					<th>Xóa</th>
+					<th>Lưu</th>
 				</tr>
 			</thead>
 			<tbody>
 				<%
-					ArrayList<RoomRecordDTO> recordDtoList = (ArrayList<RoomRecordDTO>) request.getAttribute("recordDtoList");
-					for(int i = 0; i < recordDtoList.size(); i++)
-					{
+				ArrayList<RoomRecordDTO> recordDtoList = (ArrayList<RoomRecordDTO>) request.getAttribute("recordDtoList");
+				for (int i = 0; i < recordDtoList.size(); i++) {
 				%>
 				<tr>
 					<td><%=recordDtoList.get(i).getUser_id()%></td>
@@ -274,75 +257,50 @@ img {
 					<td><%=recordDtoList.get(i).getCccd()%></td>
 					<td>
 						<%
-							if(recordDtoList.get(i).isRoom())
-							{
-						%>
-							<img src="image/tick.png" alt="yes">
-						<%
-							}
-							else 
-							{
-						%>
-							<img src="image/x.png" alt="no">
-						<%
-							}
-						%>
+						if (recordDtoList.get(i).isRoom()) {
+						%> <img src="image/tick.png" alt="yes"> <%
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
 					<td>
 						<%
-							if(recordDtoList.get(i).isElectric())
-							{
-						%>
-							<img src="image/tick.png" alt="yes">
-						<%
-							}
-							else 
-							{
-						%>
-							<img src="image/x.png" alt="no">
-						<%
-							}
-						%>
+						if (recordDtoList.get(i).isElectric()) {
+						%> <img src="image/tick.png" alt="yes"> <%
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
 					<td>
 						<%
-							if(recordDtoList.get(i).isWater())
-							{
-						%>
-							<img src="image/tick.png" alt="yes">
-						<%
-							}
-							else 
-							{
-						%>
-							<img src="image/x.png" alt="no">
-						<%
-							}
-						%>
+						if (recordDtoList.get(i).isWater()) {
+						%> <img src="image/tick.png" alt="yes"> <%
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
 					<td>
 						<%
-							if(recordDtoList.get(i).isWifi())
-							{
-						%>
-							<img src="image/tick.png" alt="yes">
-						<%
-							}
-							else 
-							{
-						%>
-							<img src="image/x.png" alt="no">
-						<%
-							}
-						%>
+						if (recordDtoList.get(i).isWifi()) {
+						%> <img src="image/tick.png" alt="yes"> <%
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
-					<td><button class="delete-btn">Xóa</button></td>
+					<td><input type="submit" id="save-btn" class="save-btn" value="Save"></td>
 				</tr>
 				<%
-					}
+				}
 				%>
 			</tbody>
 		</table>
+		<div class="button-container">
+			<input type="reset" id="cancel-btn" class="cancel-btn" value="Cancel">
+		</div>
 	</div>
 </body>
 <script>
@@ -352,16 +310,12 @@ img {
 
     let currentDate = new Date();
 	
-    <%
-		String month = (String) request.getAttribute("month");
-		String year = (String) request.getAttribute("year");
-		if(month != null) {
-	%>
+    <%String month = (String) request.getAttribute("month");
+String year = (String) request.getAttribute("year");
+if (month != null) {%>
 		currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);
 		currentDate.setFullYear(<%=Integer.parseInt(year)%>)
-	<%
-		}
-	%>
+	<%}%>
     
     const updateMonthDisplay = () => {
         const monthNames = [
@@ -374,45 +328,16 @@ img {
 
     prevMonthBtn.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
-        window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewdetailroom&roomid=" + "<%=room.getRoom_id()%>" + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
+        window.location.href = "<%=request.getContextPath()%>/RoomController?action=viewdetailroom&roomid=" + "<%=room.getRoom_id()%>" + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
     });
 
     nextMonthBtn.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
-        window.location.href = "<%= request.getContextPath() %>/RoomController?action=viewdetailroom&roomid=" + "<%=room.getRoom_id()%>" + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
+        window.location.href = "<%=request.getContextPath()%>/RoomController?action=viewdetailroom&roomid=" + "<%=room.getRoom_id()%>" + "&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
     });
 
     updateMonthDisplay();
 
-    // Xử lý sắp xếp bảng
-    const tableBody = document.querySelector('tbody');
-    const sortOptions = document.getElementById('sort-options');
-
-    const sortTable = (criteria) => {
-        const rows = Array.from(tableBody.rows);
-
-        rows.sort((rowA, rowB) => {
-            const cellA = rowA.querySelector(`td:nth-child(${criteria})`).textContent.trim();
-            const cellB = rowB.querySelector(`td:nth-child(${criteria})`).textContent.trim();
-
-            return cellA.localeCompare(cellB, undefined, { numeric: true });
-        });
-
-        rows.forEach(row => tableBody.appendChild(row));
-    };
-
-    sortOptions.addEventListener('change', () => {
-        const selectedOption = sortOptions.value;
-        const columns = {
-            "Mã người dùng": 1,
-            "Họ": 2,
-            "Tên": 3,
-            "Giới tính": 4,
-            "SĐT": 5,
-            "CCCD": 6
-        };
-        sortTable(columns[selectedOption]);
-    });
     function initializePaymentTable() {
         const paymentCells = document.querySelectorAll('tbody td img');
         const originalStates = [];
