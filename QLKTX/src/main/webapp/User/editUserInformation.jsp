@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
+<%@page import="helper.GenerateNewCode"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -128,37 +132,55 @@ input[type="text"]:focus, select:focus {
 <body>
 	<div class="form-container">
 		<h2>Chỉnh sửa thông tin cá nhân</h2>
-		<form action="" method="post">
+		<%
+			User user = (User) request.getAttribute("user");
+		%>
+		<form action="<%=request.getContextPath()%>/UserController?action=edithandle" method="post">
 			<table>
 				<tr>
 					<td><label for="userid">Mã sinh viên</label></td>
 					<td><input type="text" name="userid" id="userid"
-						value="1002220051" required readonly /></td>
+						value="<%=user.getUser_id()%>" required readonly /></td>
 
 				</tr>
 				<tr>
 					<td><label for="ho">Họ</label></td>
-					<td><input type="text" name="ho" id="ho" value="Lê Tôn Thanh"
+					<td><input type="text" name="firstname" id="ho" value="<%=user.getFirstname()%>"
 						required /></td>
 				</tr>
 				<tr>
 					<td><label for="ten">Tên</label></td>
-					<td><input type="text" name="ten" id="ten" value="An" required /></td>
+					<td><input type="text" name="lastname" id="ten" value="<%=user.getLastname()%>" required /></td>
 				</tr>
 				<tr>
 					<td><label for="sdt">Số điện thoại</label></td>
-					<td><input type="text" name="sdt" value="0123456789" required /></td>
+					<td><input type="text" name="phonenumber" value="<%=user.getPhonenumber()%>" required /></td>
 				</tr>
 				<tr>
 					<td><label for="gioitinh">Giới tính</label></td>
-					<td><select name="gioitinh" id="gioitinh" required>
-							<option value="Nam" selected>Nam</option>
-							<option value="Nữ">Nữ</option>
-					</select> <input type="hidden" name="type" value="" /></td>
+					<td>
+                        <select name="gender" id="loaiphong" required>
+                        	<%
+                        		if(user.isMale())
+                        		{
+                        	%>
+	                            <option value="Nam" selected>Nam</option>
+	                            <option value="Nữ">Nữ</option>
+                            <%
+                        		} else {
+                        			
+                            %>
+	                            <option value="Nam">Nam</option>
+	                            <option value="Nữ" selected>Nữ</option>
+                            <%
+                        		}
+                            %>
+                        </select>
+                    </td>
 				</tr>
 				<tr>
 					<td><label for="cccd">CCCD</label></td>
-					<td><input type="text" name="cccd" value="04825374823940"
+					<td><input type="text" name="cccd" value="<%=user.getCccd()%>"
 						required /></td>
 				<tr>
 					<td colspan="4"><input type="submit" value="Lưu" /><input

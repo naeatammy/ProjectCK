@@ -173,26 +173,24 @@ img {
 	<a href="<%= request.getContextPath() %>/UserController?action=viewalluser" class="back-button">← Back</a>
 	<h2>LỊCH SỬ THUÊ PHÒNG</h2>
 	<div class="form-container">
+		<%
+			User user = (User) request.getAttribute("user");
+		%>
 		<table>
 			<tr>
 				<td><label for="hoten">Họ tên</label></td>
 				<td><input type="text" id="hoten" name="hoten"
-					value="Lê Tôn Thanh An" disabled></td>
-			</tr>
-			<tr>
-				<td><label for="ngaysinh">Ngày sinh</label></td>
-				<td><input type="text" id="ngaysinh" name="ngaysinh"
-					value="01/01/2004" disabled></td>
+					value="<%=user.getFirstname()%> <%=user.getLastname()%>" disabled></td>
 			</tr>
 			<tr>
 				<td><label for="sdt">SĐT</label></td>
-				<td><input type="text" id="sdt" name="sdt" value="0463625848"
+				<td><input type="text" id="sdt" name="sdt" value="<%=user.getPhonenumber()%>"
 					disabled></td>
 			</tr>
 			<tr>
 				<td><label for="cccd">CCCD</label></td>
 				<td><input type="text" id="cccd" name="cccd"
-					value="04846284573920" disabled></td>
+					value="<%=user.getCccd()%>" disabled></td>
 			</tr>
 		</table>
 	</div>
@@ -223,9 +221,19 @@ img {
 					<td><%=contract.getDuration()%> tháng</td>
 					<td><%=contract.getRoom_id()%></td>
 					<td><%=contract.getState()%></td>
-					<td>
-						<button class="extend-btn" onclick="extend('<%=contract.getUser_id()%>', '<%=contract.getRoom_id()%>')">Gia hạn</button>
-					</td>
+						<%
+							if(contract.getState().equals("Chờ phê duyệt")) {
+						%>
+						<td></td>
+						<%
+							} else {
+						%>
+						<td>
+							<button class="extend-btn" onclick="extend('<%=contract.getUser_id()%>', '<%=contract.getRoom_id()%>')">Gia hạn</button>
+						</td>
+						<%
+							}
+						%>
 				</tr>
 			<%
 				}

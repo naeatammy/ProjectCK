@@ -83,6 +83,9 @@ input[type="submit"],input[type="button"]]:hover {
 </style>
 </head>
 <body>
+	<%
+		request.getSession().invalidate();
+	%>
 	<form name="login" action="CheckLoginServlet">
 		<h3>ĐĂNG NHẬP</h3>
 		<table>
