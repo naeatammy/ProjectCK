@@ -26,4 +26,8 @@ public class U_R_RecordBO {
 		}
 		return recordList;
 	}
+	
+	public boolean addRecord(U_R_Record record) {
+		return recordDAO.addRecord(record);
+	}
 }

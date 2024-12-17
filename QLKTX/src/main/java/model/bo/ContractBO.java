@@ -21,4 +21,8 @@ public class ContractBO {
 		}
 		return contractList;
 	}
+	
+	public boolean addContract(Contract contract) {
+		return contractDAO.addContract(contract);
+	}
 }

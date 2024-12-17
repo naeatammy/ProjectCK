@@ -430,7 +430,7 @@ img {
         paymentCells.forEach((cell) => {
             cell.addEventListener('click', () => {
                 if (cell.alt === 'no') {
-                    cell.src = '../image/tick.png';
+                    cell.src = 'image/tick.png';
                     cell.alt = 'yes';
                 } else {
                     alert('Bạn không thể thay đổi ô này từ tick xanh sang trạng thái khác!');

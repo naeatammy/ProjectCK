@@ -49,4 +49,14 @@
     <servlet-name>UserController</servlet-name>
     <url-pattern>/UserController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ContractController</display-name>
+    <servlet-name>ContractController</servlet-name>
+    <servlet-class>controller.ContractController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ContractController</servlet-name>
+    <url-pattern>/ContractController</url-pattern>
+  </servlet-mapping>
 </web-app>
