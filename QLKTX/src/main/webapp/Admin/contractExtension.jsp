@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -116,6 +119,16 @@ input[type="text"]:focus, select:focus {
 	outline: none;
 }
 
+select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+
 @media ( max-width : 600px) {
 	h2 {
 		font-size: 1.5rem;
@@ -127,47 +140,74 @@ input[type="text"]:focus, select:focus {
 </style>
 </head>
 <body>
-	<a href="showRoomRentalHistory.jsp" class="back-button">← Back</a>
+	<%
+		User user = (User) request.getAttribute("user");
+		String room_id = (String) request.getAttribute("roomid");
+	%>
+	<a href="<%=request.getContextPath()%>/UserController?action=contracthistory&userid=<%=user.getUser_id()%>" class="back-button">← Back</a>
 	<div class="form-container">
 		<h2>Gia hạn hợp đồng</h2>
-		<form action="" method="">
+		<form action="<%=request.getContextPath()%>/ContractController?action=addcontract&userid=<%=user.getUser_id()%>" method="post">
 			<table>
 				<tr>
-					<td><label for="hoten">Họ tên</label></td>
-					<td><input type="text" name="hoten" id="hoten"
-						value="Trần Văn An" required readonly /></td>
-					<td><label for="gioitinh">Giới tính</label></td>
-					<td><input type="text" name="gioitinh" value="Nam" required
-						readonly /></td>
+					<td><label for="contractid">Mã hợp đồng</label></td>
+					<td colspan="3"><input type="text" name="contractid" id="hoten"
+						value="" required /></td>
 				</tr>
 				<tr>
-					<td><label for="ngaysinh">Ngày sinh</label></td>
-					<td><input type="text" name="ngaysinh" value="04/09/2004"
-						required readonly /></td>
+					<td><label for="firstname">Họ</label></td>
+					<td><input type="text" name="firstname" id="hoten"
+						value="<%=user.getFirstname()%>" required readonly /></td>
+					<td><label for="lastname">Tên</label></td>
+					<td><input type="text" name="lastname" id="hoten"
+						value="<%=user.getLastname()%>" required readonly /></td>
 				</tr>
 				<tr>
 					<td><label for="sdt">Số điện thoại</label></td>
-					<td><input type="text" name="sdt" value="0123456789" required
+					<td><input type="text" name="phonenumber" value="0123456789" required
 						readonly /></td>
-					<td><label for="cccd">CCCD</label></td>
-					<td><input type="text" name="cccd" value="04825374823940"
-						required readonly /></td>
+					<td><label for="gioitinh">Giới tính</label></td>
+					<td>
+                        <select name="" id="loaiphong" required disabled>
+                        	<%
+                        		if(user.isMale())
+                        		{
+                        	%>
+	                            <option value="Nam" selected>Nam</option>
+	                            <option value="Nữ">Nữ</option>
+                            <%
+                        		} else {
+                        			
+                            %>
+	                            <option value="Nam">Nam</option>
+	                            <option value="Nữ" selected>Nữ</option>
+                            <%
+                        		}
+                            %>
+                        </select>
+                        <input type="hidden" name="type" value="<%=user.isMale() ? "Nam" : "Nữ"%>" />
+                    </td>
 				</tr>
 				<tr>
 					<td><label for="month-start">Tháng bắt đầu</label></td>
 					<td><input type="text" name="month-start" value="" required
 						placeholder="mm/yyyy" /></td>
-				</tr>
+					<td><label for="cccd">CCCD</label></td>
+					<td><input type="text" name="cccd" value="04825374823940"
+						required readonly /></td>
 				<tr>
 					<td><label for="sothang">Số tháng thuê</label></td>
-					<td><input type="text" name="sothang" value="" required
+					<td><input type="text" name="duration" value="" required
 						placeholder="Ví dụ: 3" /></td>
+					<td><label for="cccd">Số phòng</label></td>
+					<td><input type="text" name="roomid" value="<%=room_id%>"
+						required readonly /></td>
 				</tr>
 				<tr>
 					<td><label for="from">Từ</label></td>
-					<td><input type="text" name="from" value="" required readonly /></td>
+					<td><input type="text" name="start" value="" required readonly /></td>
 					<td><label for="to">Đến</label></td>
-					<td><input type="text" name="to" value="" required readonly /></td>
+					<td><input type="text" name="end" value="" required readonly /></td>
 				</tr>
 				<tr>
 					<td colspan="4"><input type="submit" value="Gia hạn" /><input
@@ -180,9 +220,9 @@ input[type="text"]:focus, select:focus {
 <script>
 function updateContractDates() {
     const monthStartInput = document.getElementsByName('month-start')[0];
-    const durationInput = document.getElementsByName('sothang')[0];
-    const fromInput = document.getElementsByName('from')[0];
-    const toInput = document.getElementsByName('to')[0];
+    const durationInput = document.getElementsByName('duration')[0];
+    const fromInput = document.getElementsByName('start')[0];
+    const toInput = document.getElementsByName('end')[0];
 
     const monthStart = monthStartInput.value;
     const duration = parseInt(durationInput.value);
@@ -204,7 +244,7 @@ function updateContractDates() {
 }
     function validateInputs() {
         const monthStartInput = document.getElementsByName('month-start')[0];
-        const durationInput = document.getElementsByName('sothang')[0];
+        const durationInput = document.getElementsByName('duration')[0];
 
         const monthStart = monthStartInput.value.trim();
         const duration = durationInput.value.trim();
@@ -243,6 +283,6 @@ function updateContractDates() {
         }
     });
     document.getElementsByName('month-start')[0].addEventListener('input', updateContractDates);
-    document.getElementsByName('sothang')[0].addEventListener('input', updateContractDates);
+    document.getElementsByName('duration')[0].addEventListener('input', updateContractDates);
 </script>
 </html>

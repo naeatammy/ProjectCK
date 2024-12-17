@@ -217,14 +217,14 @@ img {
 				{
 			%>
 				<tr>
-					<td><%=contract.getUser_id()%></td>
+					<td><%=contract.getContract_id()%></td>
 					<td><%=contract.getStart()%></td>
 					<td><%=contract.getEnd()%></td>
 					<td><%=contract.getDuration()%> tháng</td>
 					<td><%=contract.getRoom_id()%></td>
 					<td><%=contract.getState()%></td>
 					<td>
-						<button class="extend-btn">Gia hạn</button>
+						<button class="extend-btn" onclick="extend('<%=contract.getUser_id()%>', '<%=contract.getRoom_id()%>')">Gia hạn</button>
 					</td>
 				</tr>
 			<%
@@ -235,7 +235,7 @@ img {
 	</div>
 </body>
 <script>
-function addExtendButtonHandlers() {
+/* function addExtendButtonHandlers() {
     const extendButtons = document.querySelectorAll('.extend-btn');
 
     extendButtons.forEach((button, index) => {
@@ -251,6 +251,9 @@ function addExtendButtonHandlers() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', addExtendButtonHandlers);
+document.addEventListener('DOMContentLoaded', addExtendButtonHandlers); */
+function extend(userid, roomid) {
+	window.location.href = "<%=request.getContextPath()%>/ContractController?action=extend&userid=" + userid + "&roomid=" + roomid;
+}
 </script>
 </html>
