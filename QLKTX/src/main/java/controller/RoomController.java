@@ -37,6 +37,23 @@ public class RoomController extends HttpServlet {
 			request.getRequestDispatcher("Admin/showAllRoom.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("_viewallroom")) {
+			String month = request.getParameter("month");
+			String year = request.getParameter("year");
+			System.out.println(month);
+			System.out.println(year);
+			ArrayList<Room> roomList = roomBO.getAllRoom();	
+			ArrayList<RoomDTO> roomDtoList = new ArrayList<RoomDTO>();
+			for (Room room : roomList) {
+				String state = recordBO.countRecord(Integer.parseInt(month), Integer.parseInt(year), room.getRoom_id()) + "/" + room.getCapacity();
+				roomDtoList.add(new RoomDTO(room.getRoom_id(), room.getType(), room.getCapacity(), state, room.getPrice()));
+			}
+			request.setAttribute("roomDtoList", roomDtoList);
+			request.setAttribute("month", month);
+			request.setAttribute("year", year);
+			request.getRequestDispatcher("User/rentRoom.jsp").forward(request, response);
+			return;
+		}
 		if(action.equals("viewdetailroom")) {
 			String month = request.getParameter("month");
 			String year = request.getParameter("year");

@@ -29,6 +29,8 @@ public class User {
 		this.cccd = cccd;
 		this.male = male;
 	}
+	
+	
 	public String getUser_id() {
 		return user_id;
 	}

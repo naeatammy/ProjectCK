@@ -13,11 +13,18 @@ public class CheckLoginServlet extends HttpServlet {
 		
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CheckLoginBO checkloginBO = new CheckLoginBO();
+		UserBO userBO = new UserBO();
 		String username = request.getParameter("username");
+		System.out.println(username);
 		String password = request.getParameter("password");
 		if(checkloginBO.CheckUserExist(username, password)) {
-			
-			response.sendRedirect("Admin/index.jsp");
+			if(username.equals("admin"))
+				response.sendRedirect("Admin/index.jsp");
+			else {
+				request.getSession().setAttribute("username", username);
+				request.getSession().setAttribute("userid", userBO.getIdByUsername(username));
+				response.sendRedirect("User/index2.jsp");
+			}
 		} else {
 			response.sendRedirect("login.jsp");
 		}
