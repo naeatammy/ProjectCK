@@ -89,10 +89,12 @@
         }
 
         input[type="submit"] {
-            background-color: #3ea4c6;
+            background-color: rgb(243, 158, 1);
         }
 
-        input[type="submit"]:hover,
+        input[type="submit"]:hover{
+            background-color: rgb(198, 130, 3)
+        }
         .back-button:hover {
             background-color: #2a6c81;
         }
@@ -164,7 +166,7 @@
                     <td><input type="text" name="trangthai" value="Đang thuê" required readonly/></td>
                 </tr>
                 <tr>
-                    <td colspan="4"><input type="submit" value="Gia hạn" /></td>
+                    <td colspan="4"><input type="submit" value="Phê duyệt" /></td>
                 </tr>
             </table>
         </form>

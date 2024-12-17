@@ -200,20 +200,27 @@ tbody tr:hover {
 				<div class="search-dropdown">
 					<label for="search-options">Tìm kiếm theo:</label> <select
 						id="search-options">
-						<option value="Số phòng">Số phòng</option>
-						<option value="Loại phòng">Loại phòng</option>
-						<option value="Sức chứa">Sức chứa</option>
-						<option value="Giá">Giá</option>
+						<option value="STT">STT</option>
+						<option value="Họ">Họ</option>
+						<option value="Tên">Tên</option>
+						<option value="Phòng">Phòng</option>
+						<option value="Thời gian">Thời gian</option>
+						<option value="Từ">Từ</option>
+						<option value="Đến">Đến</option>
+						<option value="Trạng thái">Trạng thái</option>
 					</select>
 				</div>
 				<div class="sort-dropdown">
 					<label for="sort-options">Sắp xếp theo:</label> <select
 						id="sort-options">
-						<option value="Số phòng">Số phòng</option>
-						<option value="Loại phòng">Loại phòng</option>
-						<option value="Sức chứa">Sức chứa</option>
+						<option value="STT">STT</option>
+						<option value="Họ">Họ</option>
+						<option value="Tên">Tên</option>
+						<option value="Phòng">Phòng</option>
+						<option value="Thời gian">Thời gian</option>
+						<option value="Từ">Từ</option>
+						<option value="Đến">Đến</option>
 						<option value="Trạng thái">Trạng thái</option>
-						<option value="Giá">Giá</option>
 					</select>
 				</div>
 			</div>
@@ -284,31 +291,35 @@ tbody tr:hover {
 	</div>
 </body>
 <script>
-        function addRowClickListener() {
-            const tableRows = document.querySelectorAll('tbody tr');
+function addRowClickListener() {
+    const tableRows = document.querySelectorAll('tbody tr');
 
-            tableRows.forEach(row => {
-                row.addEventListener('click', (event) => {
-                    const isButton = event.target.closest('button');
-                    if (!isButton) {
-                        const roomNumber = row.cells[0].textContent.trim();
+    tableRows.forEach(row => {
+        row.addEventListener('click', (event) => {
+            const isButton = event.target.closest('button');
+            if (!isButton) {
+                const status = row.cells[7].textContent.trim();
 
-                        window.location.href = `showOneContract.jsp`;
-                    }
-                });
-            });
-        }
-        function addButtonsBasedOnStatus() {
-            const rows = document.querySelectorAll('tbody tr');
+                if (status === "Chờ phê duyệt") {
+                    window.location.href = `acceptOneContract.jsp`;
+                } else {
+                    window.location.href = `showOneContract.jsp`;
+                }
+            }
+        });
+    });
+}
+function addButtonsBasedOnStatus() {
+	const rows = document.querySelectorAll('tbody tr');
 
-            rows.forEach(row => {
-                const statusCell = row.cells[7];
-                const optionsCell = row.cells[8]; 
-                const status = statusCell.textContent.trim(); 
+    rows.forEach(row => {
+    	const statusCell = row.cells[7];
+        const optionsCell = row.cells[8]; 
+        const status = statusCell.textContent.trim(); 
 
-                optionsCell.innerHTML = '';
+        optionsCell.innerHTML = '';
 
-                if (status === 'Chờ phê duyệt') {
+         if (status === 'Chờ phê duyệt') {
                     const acceptBtn = document.createElement('button');
                     acceptBtn.textContent = 'Phê duyệt';
                     acceptBtn.className = 'accept-btn';
@@ -335,10 +346,72 @@ tbody tr:hover {
                 }
             });
         }
+function setupTableSortingAndSearch() {
+    const tableBody = document.querySelector('tbody');
+    const searchInput = document.getElementById('search-input');
+    const searchOptions = document.getElementById('search-options');
+    const sortOptions = document.getElementById('sort-options');
+    const tableRows = document.querySelectorAll('tbody tr');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            addButtonsBasedOnStatus(),
-            addRowClickListener()
+    const filterAndSortTable = () => {
+        const rows = Array.from(tableBody.rows);	
+        const searchValue = searchInput.value.toLowerCase();
+        const searchColumnIndex = {
+        	"STT": 0,
+            "Họ": 1,
+            "Tên": 2,
+            "Phòng": 3,
+            "Thời gian": 4,
+            "Từ": 5,
+            "Đến": 6,
+            "Trạng thái": 7
+        }[searchOptions.value];
+        const sortColumnIndex = {
+            "STT": 0,
+            "Họ": 1,
+            "Tên": 2,
+            "Phòng": 3,
+            "Thời gian": 4,
+            "Từ": 5,
+            "Đến": 6,
+            "Trạng thái": 7
+        }[sortOptions.value];
+
+        rows.forEach(row => {
+            const cellValue = row.cells[searchColumnIndex].textContent.toLowerCase();
+            if (cellValue.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
+        
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[sortColumnIndex].textContent.trim();
+            const cellB = rowB.cells[sortColumnIndex].textContent.trim();
+
+            const valueA = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
+            const valueB = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
+
+            return typeof valueA === 'number' && typeof valueB === 'number'
+                ? valueA - valueB
+                : valueA.localeCompare(valueB, undefined, { numeric: true });
+        });
+
+        tableBody.innerHTML = '';
+        rows.forEach(row => tableBody.appendChild(row));
+    };
+
+    searchInput.addEventListener('input', filterAndSortTable);
+    searchOptions.addEventListener('change', filterAndSortTable);
+    sortOptions.addEventListener('change', filterAndSortTable);
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    addButtonsBasedOnStatus(),
+    addRowClickListener(),
+    setupTableSortingAndSearch()
+});
     </script>
 </html>
