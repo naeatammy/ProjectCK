@@ -57,37 +57,6 @@
             gap: 10px;
         }
 
-        .month-container {
-            padding: 5px 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-size: 14px;
-            margin-left: auto;
-        }
-
-        .month-selector {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-        }
-
-        .month-selector button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #3ea4c6;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .month-selector button:hover {
-            background-color: #2b91b0;
-        }
-
         #add-user {
             background-color: #3ea4c6;
             color: white;
@@ -266,13 +235,6 @@
         <div class="main-content">
             <header>
                 <h2>DANH SÁCH CÁC TÀI KHOẢN</h2>
-                <div class="month-container">
-                    <div class="month-selector">
-                        <button id="prev-month">Trước</button>
-                        <span id="current-month">Tháng 12, 2024</span>
-                        <button id="next-month">Sau</button>
-                    </div>
-                </div>
                 <button id="add-user">Thêm tài khoản</button>
             </header>
             <div class="controls-container">
@@ -281,10 +243,10 @@
                 </div>
                 <div class="search-dropdown">
                     <label for="search-options">Tìm kiếm theo:</label> <select id="search-options">
-                        <option value="STT">STT</option>
+                        <option value="Mã người dùng">Mã người dùng</option>
+                        <option value="Họ">Họ</option>
                         <option value="Tên">Tên</option>
                         <option value="Giới tính">Giới tính</option>
-                        <option value="Ngày sinh">Ngày sinh</option>
                         <option value="SĐT">SĐT</option>
                         <option value="CCCD">CCCD</option>
                     </select>
@@ -292,10 +254,10 @@
                 <div class="sort-dropdown">
                     <label for="sort-options">Sắp xếp theo:</label>
                     <select id="sort-options">
-                        <option value="STT">STT</option>
+                        <option value="Mã người dùng">Mã người dùng</option>
+                        <option value="Họ">Họ</option>
                         <option value="Tên">Tên</option>
                         <option value="Giới tính">Giới tính</option>
-                        <option value="Ngày sinh">Ngày sinh</option>
                     </select>
                 </div>
             </div>
@@ -341,30 +303,6 @@
 		function contractHistory(user_id) {
 			window.location.href = "<%=request.getContextPath()%>/UserController?action=contracthistory&userid=" + user_id;
 		}
-        const currentMonthElement = document.getElementById('current-month');
-        const prevMonthBtn = document.getElementById('prev-month');
-        const nextMonthBtn = document.getElementById('next-month');
-
-        let currentDate = new Date();
-
-        const updateMonthDisplay = () => {
-            const monthNames = [
-                "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5",
-                "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9",
-                "Tháng 10", "Tháng 11", "Tháng 12"
-            ];
-            currentMonthElement.textContent = `${monthNames[currentDate.getMonth()]}, ${currentDate.getFullYear()}`;
-        };
-
-        prevMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            updateMonthDisplay();
-        });
-
-        nextMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            updateMonthDisplay();
-        });
 
         function setupAddUserButton() {
             const addRoomButton = document.getElementById('add-user');
@@ -373,42 +311,64 @@
             });
         }
 
-        const setupTableSorting = () => {
+        function setupTableSortingAndSearch() {
             const tableBody = document.querySelector('tbody');
+            const searchInput = document.getElementById('search-input');
+            const searchOptions = document.getElementById('search-options');
             const sortOptions = document.getElementById('sort-options');
+            const tableRows = document.querySelectorAll('tbody tr');
 
-            const sortTable = (criteria) => {
-                const rows = Array.from(tableBody.rows);
+            const filterAndSortTable = () => {
+                const rows = Array.from(tableBody.rows);	
+                const searchValue = searchInput.value.toLowerCase();
+                const searchColumnIndex = {
+                	"Mã người dùng": 0,
+                    "Họ": 1,
+                    "Tên": 2,
+                    "Giới tính": 3,
+                    "SĐT": 4,
+                    "CCCD": 5
+                }[searchOptions.value];
+                const sortColumnIndex = {
+                	"Mã người dùng": 0,
+                    "Họ": 1,
+                    "Tên": 2,
+                    "Giới tính": 3,
+                }[sortOptions.value];
 
+                rows.forEach(row => {
+                    const cellValue = row.cells[searchColumnIndex].textContent.toLowerCase();
+                    if (cellValue.includes(searchValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
                 rows.sort((rowA, rowB) => {
-                    const cellA = rowA.querySelector(`td:nth-child(${criteria})`).textContent.trim();
-                    const cellB = rowB.querySelector(`td:nth-child(${criteria})`).textContent.trim();
+                    const cellA = rowA.cells[sortColumnIndex].textContent.trim();
+                    const cellB = rowB.cells[sortColumnIndex].textContent.trim();
 
-                    return cellA.localeCompare(cellB, undefined, { numeric: true });
+                    const valueA = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
+                    const valueB = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
+
+                    return typeof valueA === 'number' && typeof valueB === 'number'
+                        ? valueA - valueB
+                        : valueA.localeCompare(valueB, undefined, { numeric: true });
                 });
 
+                tableBody.innerHTML = '';
                 rows.forEach(row => tableBody.appendChild(row));
             };
 
-            const handleSortChange = () => {
-                const selectedOption = sortOptions.value;
-                const columns = {
-                    "STT": 1,
-                    "Họ": 2,
-                    "Tên": 3,
-                    "Giới tính": 4,
-                    "Ngày sinh": 5
-                };
-                sortTable(columns[selectedOption]);
-            };
-
-            sortOptions.addEventListener('change', handleSortChange);
-        };
+            searchInput.addEventListener('input', filterAndSortTable);
+            searchOptions.addEventListener('change', filterAndSortTable);
+            sortOptions.addEventListener('change', filterAndSortTable);
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             setupAddUserButton();
-            setupTableSorting();
-            updateMonthDisplay();
+            setupTableSortingAndSearch();
         });
     </script>
 </html>
