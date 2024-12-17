@@ -40,4 +40,19 @@ public class U_R_RecordDAO {
 			return false;
 		}
 	}
+	
+	public boolean updateRecord(U_R_Record record) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			Connection conn = DriverManager.getConnection(url, "root", "");
+			Statement sm = conn.createStatement();
+			String sql = "UPDATE `user_room_record` SET `room`="+record.isRoom()+",`electric`="+record.isElectric()+",`water`="+record.isWater()+",`wifi`="+record.isWifi()+" WHERE `room_id` = '"+record.getRoom_id()+"' AND `user_id` = '"+record.getUser_id()+"' AND `month` = "+record.getMonth()+" AND `year` = "+record.getYear()+"";
+			int rowAffected = sm.executeUpdate(sql);
+			return rowAffected > 0;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
 }

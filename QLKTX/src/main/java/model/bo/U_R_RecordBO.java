@@ -30,4 +30,8 @@ public class U_R_RecordBO {
 	public boolean addRecord(U_R_Record record) {
 		return recordDAO.addRecord(record);
 	}
+	
+	public boolean updateRecord(U_R_Record record) {
+		return recordDAO.updateRecord(record);
+	}
 }

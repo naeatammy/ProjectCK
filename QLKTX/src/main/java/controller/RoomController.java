@@ -152,6 +152,38 @@ public class RoomController extends HttpServlet {
 			request.getRequestDispatcher("Admin/showAllRoom.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("updaterecord")) {
+			String user_id = request.getParameter("userid");
+			String room_id = request.getParameter("roomid");
+			String isroom = request.getParameter("room");
+			String electric = request.getParameter("electric");
+			String water = request.getParameter("water");
+			String wifi = request.getParameter("wifi");
+			String month = request.getParameter("month");
+			String year = request.getParameter("year");
+			U_R_Record recordUpdate = new U_R_Record(room_id, user_id, Integer.parseInt(month), Integer.parseInt(year), Boolean.parseBoolean(isroom), Boolean.parseBoolean(electric), Boolean.parseBoolean(water), Boolean.parseBoolean(wifi));
+			boolean isUpdated = recordBO.updateRecord(recordUpdate);
+			if(isUpdated) {
+				System.out.println("Success");
+			} else {
+				System.out.println("Failed");
+			}
+			ArrayList<U_R_Record> recordList = recordBO.getAllRecord(Integer.parseInt(month), Integer.parseInt(year), room_id);
+			ArrayList<RoomRecordDTO> recordDtoList = new ArrayList<RoomRecordDTO>();
+			for (U_R_Record record : recordList) {
+				User user = userBO.getUserById(record.getUser_id());
+				recordDtoList.add(new RoomRecordDTO(user.getUser_id(), user.getFirstname(), user.getLastname(), user.getPhonenumber(), user.getCccd(), record.isRoom(), record.isElectric(), record.isWater(), record.isWifi()));
+			}
+			Room room = roomBO.getRoomById(room_id);
+			String state = recordBO.countRecord(Integer.parseInt(month), Integer.parseInt(year), room.getRoom_id()) + "/" + room.getCapacity();
+			request.setAttribute("room", room);
+			request.setAttribute("state", state);
+			request.setAttribute("month", month);
+			request.setAttribute("year", year);
+			request.setAttribute("recordDtoList", recordDtoList);
+			request.getRequestDispatcher("Admin/showOneRoom.jsp").forward(request, response);
+ 			return;
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
