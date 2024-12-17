@@ -25,8 +25,13 @@ public class ContractController extends HttpServlet {
 			String user_id = request.getParameter("userid");
 			String room_id = request.getParameter("roomid");
 			User user = userBO.getUserById(user_id);
+			ArrayList<String> existingCodes = new ArrayList<String>();
+			for(Contract contract : contractBO.getAllContract()) {
+				existingCodes.add(contract.getContract_id());
+			}
 			request.setAttribute("user", user);
 			request.setAttribute("roomid", room_id);
+			request.setAttribute("code", existingCodes);
 			request.getRequestDispatcher("Admin/contractExtension.jsp").forward(request, response);
 			return;
 		}
@@ -34,8 +39,13 @@ public class ContractController extends HttpServlet {
 			String user_id = request.getParameter("userid");
 			String room_id = request.getParameter("roomid");
 			User user = userBO.getUserById(user_id);
+			ArrayList<String> existingCodes = new ArrayList<String>();
+			for(Contract contract : contractBO.getAllContract()) {
+				existingCodes.add(contract.getContract_id());
+			}
 			request.setAttribute("user", user);
 			request.setAttribute("roomid", room_id);
+			request.setAttribute("code", existingCodes);
 			request.getRequestDispatcher("Admin/_contractExtension.jsp").forward(request, response);
 			return;
 		}
