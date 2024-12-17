@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,7 +77,8 @@
 
         input[type="submit"],
         input[type="reset"],
-        .back-button {
+        .back-button,
+        .accept-button {
             width: 48%;
             padding: 10px;
             font-size: 1rem;
@@ -88,12 +92,14 @@
             display: inline-block;
         }
 
-        input[type="submit"] {
+        input[type="submit"],
+        .accept-button {
             background-color: #3ea4c6;
         }
 
         input[type="submit"]:hover,
-        .back-button:hover {
+        .back-button:hover,
+        .accept-button:hover {
             background-color: #2a6c81;
         }
         td:last-child {
@@ -108,6 +114,15 @@
             font-size: 1rem;
             color: #333;
         }
+        
+	select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
 
         input[type="text"]:focus,
         select:focus {
@@ -121,53 +136,154 @@
             }
 
             input[type="submit"],
-            .back-button {
+            .back-button,
+            .accept-button {
                 width: 100%;
             }
         }
     </style>
 </head>
 <body>
-<a href="showAllContract.jsp" class="back-button">← Back</a>
+<%
+	User user = (User) request.getAttribute("user");
+	Contract contract = (Contract) request.getAttribute("contract");
+%>
+<a href="<%=request.getContextPath()%>/ContractController?action=viewallcontract" class="back-button">← Back</a>
     <div class="form-container">
         <h2>Chi tiết hợp đồng</h2>
-        <form action="" method="">
+        <%
+        	if(contract.getState().equals("Chờ phê duyệt")) {
+        %>
+        <form action="<%=request.getContextPath()%>/ContractController?action=updatecontract&contractid=<%=contract.getContract_id()%>" method="post">
             <table>
                 <tr>
-                    <td><label for="hoten">Họ tên</label></td>
-                    <td><input type="text" name="hoten" id="hoten" value="Trần Văn An" required readonly/></td>
-                    <td><label for="gioitinh">Giới tính</label></td>
-                    <td><input type="text" name="gioitinh" value="Nam" required readonly/></td>
+                    <td><label for="firstname">Họ</label></td>
+					<td><input type="text" name="firstname" id="hoten"
+						value="<%=user.getFirstname()%>" required readonly /></td>
+					<td><label for="gioitinh">Giới tính</label></td>
+					<td>
+                        <select name="" id="loaiphong" required disabled>
+                        	<%
+                        		if(user.isMale())
+                        		{
+                        	%>
+	                            <option value="Nam" selected>Nam</option>
+	                            <option value="Nữ">Nữ</option>
+                            <%
+                        		} else {
+                        			
+                            %>
+	                            <option value="Nam">Nam</option>
+	                            <option value="Nữ" selected>Nữ</option>
+                            <%
+                        		}
+                            %>
+                        </select>
+                        <input type="hidden" name="type" value="<%=user.isMale() ? "Nam" : "Nữ"%>" />
+                    </td>
                 </tr>
                 <tr>
-                    <td><label for="ngaysinh">Ngày sinh</label></td>
-                    <td><input type="text" name="ngaysinh" value="04/09/2004" required readonly/></td>
+                	<td><label for="lastname">Tên</label></td>
+					<td colspan="3"><input type="text" name="lastname" id="hoten"
+						value="<%=user.getLastname()%>" required readonly /></td>
                 </tr>
                 <tr>
                     <td><label for="sdt">Số điện thoại</label></td>
-                    <td><input type="text" name="sdt" value="0123456789" required readonly/></td>
+					<td><input type="text" name="phonenumber" value="<%=user.getPhonenumber()%>" required
+						readonly /></td>
                     <td><label for="cccd">CCCD</label></td>
-                    <td><input type="text" name="cccd" value="04825374823940" required readonly/></td>
-                </tr>
-                <tr>
-                    <td><label for="thoigian">Thời gian thuê</label></td>
-                    <td><input type="text" name="thoigian" value="3 tháng" required readonly/></td>
+					<td><input type="text" name="cccd" value="<%=user.getCccd()%>"
+						required readonly /></td>
                 </tr>
                 <tr>
                     <td><label for="from">Từ</label></td>
-                    <td><input type="text" name="from" value="01/11/2024" required readonly/></td>
+                    <td><input type="text" name="from" value="<%=contract.getStart()%>" required readonly/></td>
                     <td><label for="to">Đến</label></td>
-                    <td><input type="text" name="to" value="31/01/2025" required readonly/></td>
+                    <td><input type="text" name="to" value="<%=contract.getEnd()%>" required readonly/></td>
                 </tr>
                 <tr>
                     <td><label for="trangthai">Trạng thái</label></td>
-                    <td><input type="text" name="trangthai" value="Đang thuê" required readonly/></td>
+                    <td><input type="text" name="trangthai" value="<%=contract.getState()%>" required readonly/></td>
+    
+                    <td><label for="thoigian">Thời gian thuê</label></td>
+                    <td><input type="text" name="thoigian" value="<%=contract.getDuration()%> tháng" required readonly/></td>
+          
                 </tr>
                 <tr>
-                    <td colspan="4"><input type="submit" value="Gia hạn" /></td>
+                    <td colspan="4">
+                    	<input type="submit" value="Phê duyệt">
+                    </td>
                 </tr>
             </table>
         </form>
+        <%
+        	} else {
+        %>
+        <form action="<%=request.getContextPath()%>/ContractController?action=_extend&userid=<%=user.getUser_id()%>&roomid=<%=contract.getRoom_id()%>" method="post">
+            <table>
+                <tr>
+                    <td><label for="firstname">Họ</label></td>
+					<td><input type="text" name="firstname" id="hoten"
+						value="<%=user.getFirstname()%>" required readonly /></td>
+					<td><label for="gioitinh">Giới tính</label></td>
+					<td>
+                        <select name="" id="loaiphong" required disabled>
+                        	<%
+                        		if(user.isMale())
+                        		{
+                        	%>
+	                            <option value="Nam" selected>Nam</option>
+	                            <option value="Nữ">Nữ</option>
+                            <%
+                        		} else {
+                        			
+                            %>
+	                            <option value="Nam">Nam</option>
+	                            <option value="Nữ" selected>Nữ</option>
+                            <%
+                        		}
+                            %>
+                        </select>
+                        <input type="hidden" name="type" value="<%=user.isMale() ? "Nam" : "Nữ"%>" />
+                    </td>
+                </tr>
+                <tr>
+                	<td><label for="lastname">Tên</label></td>
+					<td colspan="3"><input type="text" name="lastname" id="hoten"
+						value="<%=user.getLastname()%>" required readonly /></td>
+                </tr>
+                <tr>
+                    <td><label for="sdt">Số điện thoại</label></td>
+					<td><input type="text" name="phonenumber" value="<%=user.getPhonenumber()%>" required
+						readonly /></td>
+                    <td><label for="cccd">CCCD</label></td>
+					<td><input type="text" name="cccd" value="<%=user.getCccd()%>"
+						required readonly /></td>
+                </tr>
+                <tr>
+                    <td><label for="from">Từ</label></td>
+                    <td><input type="text" name="from" value="<%=contract.getStart()%>" required readonly/></td>
+                    <td><label for="to">Đến</label></td>
+                    <td><input type="text" name="to" value="<%=contract.getEnd()%>" required readonly/></td>
+                </tr>
+                <tr>
+                    <td><label for="trangthai">Trạng thái</label></td>
+                    <td><input type="text" name="trangthai" value="<%=contract.getState()%>" required readonly/></td>
+    
+                    <td><label for="thoigian">Thời gian thuê</label></td>
+                    <td><input type="text" name="thoigian" value="<%=contract.getDuration()%> tháng" required readonly/></td>
+          
+                </tr>
+                <tr>
+                    <td colspan="4">
+                    	<input type="submit" value="Gia hạn">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <%
+        	}
+        %>
     </div>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -228,7 +231,7 @@ tbody tr:hover {
 				<table>
 					<thead>
 						<tr>
-							<th>STT</th>
+							<th>Mã hợp đồng</th>
 							<th>Họ</th>
 							<th>Tên</th>
 							<th>Phòng</th>
@@ -240,50 +243,36 @@ tbody tr:hover {
 						</tr>
 					</thead>
 					<tbody>
+					<%
+						ArrayList<ContractDTO> contractList = (ArrayList<ContractDTO>) request.getAttribute("contractList");
+						for(ContractDTO contract : contractList) {
+					%>
 						<tr>
-							<td>1</td>
-							<td>Nguyễn Đắc Nguyên</td>
-							<td>Tâm</td>
-							<td>A101</td>
-							<td>6 tháng</td>
-							<td>01/12/2024</td>
-							<td>31/05/2025</td>
-							<td>Chờ phê duyệt</td>
-							<td></td>
+							<td><%=contract.getContract_id()%></td>
+							<td><%=contract.getFirstname()%></td>
+							<td><%=contract.getLastname()%></td>
+							<td><%=contract.getRoom_id()%></td>
+							<td><%=contract.getDuration()%></td>
+							<td><%=contract.getStart()%></td>
+							<td><%=contract.getEnd()%></td>
+							<td><%=contract.getState()%></td>
+							<td>
+								<%
+									if(contract.getState().equals("Chờ phê duyệt")) {
+								%>
+									<button class="accept-btn" style="margin-right: 5px" onclick="Accept('<%=contract.getContract_id()%>')">Phê duyệt</button>
+								<%
+									} else {
+								%>
+									<button class="extend-btn" style="margin-right: 5px" onclick="Extend('<%=contract.getContract_id()%>', '<%=contract.getUser_id()%>', '<%=contract.getRoom_id()%>')">Gia hạn</button>
+								<%
+									}									
+								%>
+							</td>
 						</tr>
-						<tr>
-							<td>2</td>
-							<td>Trần Văn</td>
-							<td>An</td>
-							<td>A101</td>
-							<td>3 tháng</td>
-							<td>01/11/2024</td>
-							<td>31/01/2025</td>
-							<td>Đang thuê</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>Lê Tôn Thanh</td>
-							<td>An</td>
-							<td>A202</td>
-							<td>3 tháng</td>
-							<td>01/03/2024</td>
-							<td>31/05/2024</td>
-							<td>Hết hạn</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>Lê Tôn Thanh</td>
-							<td>An</td>
-							<td>A202</td>
-							<td>3 tháng</td>
-							<td>28/02/2024</td>
-							<td>01/12/2023</td>
-							<td>Hết hạn</td>
-							<td></td>
-						</tr>
+					<%
+						}
+					%>
 					</tbody>
 				</table>
 			</div>
@@ -298,54 +287,21 @@ function addRowClickListener() {
         row.addEventListener('click', (event) => {
             const isButton = event.target.closest('button');
             if (!isButton) {
-                const status = row.cells[7].textContent.trim();
-
-                if (status === "Chờ phê duyệt") {
-                    window.location.href = `acceptOneContract.jsp`;
-                } else {
-                    window.location.href = `showOneContract.jsp`;
-                }
+            	const contract_id = row.cells[0].innerText;
+                window.location.href = "<%=request.getContextPath()%>/ContractController?action=contractdetail&contractid=" + contract_id;
             }
         });
     });
 }
-function addButtonsBasedOnStatus() {
-	const rows = document.querySelectorAll('tbody tr');
 
-    rows.forEach(row => {
-    	const statusCell = row.cells[7];
-        const optionsCell = row.cells[8]; 
-        const status = statusCell.textContent.trim(); 
+function Accept(contractid, userid) {
+	window.location.href = "<%=request.getContextPath()%>/ContractController?action=updatecontract&contractid=" + contractid;	
+}
 
-        optionsCell.innerHTML = '';
+function Extend(contractid, userid, roomid) {
+	window.location.href = "<%=request.getContextPath()%>/ContractController?action=_extend&userid=" + userid + "&roomid=" + roomid;
+}
 
-         if (status === 'Chờ phê duyệt') {
-                    const acceptBtn = document.createElement('button');
-                    acceptBtn.textContent = 'Phê duyệt';
-                    acceptBtn.className = 'accept-btn';
-                    acceptBtn.style.marginRight = "5px"
-
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.textContent = 'Xóa';
-                    deleteBtn.className = 'delete-btn';
-
-                    optionsCell.appendChild(acceptBtn);
-                    optionsCell.appendChild(deleteBtn);
-                } else {
-                    const extendBtn = document.createElement('button');
-                    extendBtn.textContent = 'Gia hạn';
-                    extendBtn.className = 'extend-btn';
-                    extendBtn.style.marginRight = "5px";
-
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.textContent = 'Xóa';
-                    deleteBtn.className = 'delete-btn';
-
-                    optionsCell.appendChild(extendBtn);
-                    optionsCell.appendChild(deleteBtn);
-                }
-            });
-        }
 function setupTableSortingAndSearch() {
     const tableBody = document.querySelector('tbody');
     const searchInput = document.getElementById('search-input');
@@ -409,7 +365,6 @@ function setupTableSortingAndSearch() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    addButtonsBasedOnStatus(),
     addRowClickListener(),
     setupTableSortingAndSearch()
 });

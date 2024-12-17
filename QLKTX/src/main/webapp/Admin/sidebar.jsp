@@ -65,7 +65,7 @@ a {
 			%>
 			<li class="active" data-page="<%= request.getContextPath() %>/RoomController?action=viewallroom&month=<%=month%>&year=<%=year%>">Quản lý phòng</li>
 			<li data-page="<%= request.getContextPath() %>/UserController?action=viewalluser">Quản lý tài khoản</li>
-			<li data-page="showAllContract.jsp">Quản lý hợp đồng</li>
+			<li data-page="<%=request.getContextPath()%>/ContractController?action=viewallcontract">Quản lý hợp đồng</li>
 			<li id="logout">Đăng xuất</li>
 		</ul>
 	</div>
@@ -89,8 +89,8 @@ a {
                             console.error('Iframe content not found!');
                         }
                     } else {
-                        window.top.location.href = "./login.jsp";
-                        window.top.history.replaceState(null, null, "./login.jsp");
+                        window.top.location.href = "../login.jsp";
+                        window.top.history.replaceState(null, null, "../login.jsp");
                     }
                 });
             });

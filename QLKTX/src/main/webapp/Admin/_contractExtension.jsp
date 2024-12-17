@@ -144,10 +144,10 @@ select {
 		User user = (User) request.getAttribute("user");
 		String room_id = (String) request.getAttribute("roomid");
 	%>
-	<a href="<%=request.getContextPath()%>/UserController?action=contracthistory&userid=<%=user.getUser_id()%>" class="back-button">← Back</a>
+	<a href="<%=request.getContextPath()%>/ContractController?action=viewallcontract" class="back-button">← Back</a>
 	<div class="form-container">
 		<h2>Gia hạn hợp đồng</h2>
-		<form action="<%=request.getContextPath()%>/ContractController?action=addcontract&userid=<%=user.getUser_id()%>" method="post">
+		<form action="<%=request.getContextPath()%>/ContractController?action=_addcontract&userid=<%=user.getUser_id()%>" method="post">
 			<table>
 				<tr>
 					<td><label for="contractid">Mã hợp đồng</label></td>
@@ -164,7 +164,7 @@ select {
 				</tr>
 				<tr>
 					<td><label for="sdt">Số điện thoại</label></td>
-					<td><input type="text" name="phonenumber" value="<%=user.getPhonenumber()%>" required
+					<td><input type="text" name="phonenumber" value="0123456789" required
 						readonly /></td>
 					<td><label for="gioitinh">Giới tính</label></td>
 					<td>
@@ -193,7 +193,7 @@ select {
 					<td><input type="text" name="month-start" value="" required
 						placeholder="mm/yyyy" /></td>
 					<td><label for="cccd">CCCD</label></td>
-					<td><input type="text" name="cccd" value="<%=user.getCccd()%>"
+					<td><input type="text" name="cccd" value="04825374823940"
 						required readonly /></td>
 				<tr>
 					<td><label for="sothang">Số tháng thuê</label></td>
