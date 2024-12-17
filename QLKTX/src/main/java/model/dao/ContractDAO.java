@@ -11,7 +11,7 @@ public class ContractDAO {
 		ArrayList<Contract> contractList = new ArrayList<Contract>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "SELECT * FROM contract";
@@ -31,7 +31,7 @@ public class ContractDAO {
 	public boolean addContract(Contract contract) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");

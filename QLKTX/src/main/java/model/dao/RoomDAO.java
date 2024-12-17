@@ -10,7 +10,7 @@ public class RoomDAO {
 		ArrayList<Room> roomList = new ArrayList<Room>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "SELECT * FROM room";
@@ -30,7 +30,7 @@ public class RoomDAO {
 	public boolean addRoom(Room room) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "INSERT INTO `room`(`room_id`, `type`, `capacity`, `price`) VALUES ('"+room.getRoom_id()+"','"+room.getType()+"','"+room.getCapacity()+"','"+room.getPrice()+"')";
@@ -45,7 +45,7 @@ public class RoomDAO {
 	public boolean updateRoom(Room room) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "UPDATE `room` SET `price`='" + room.getPrice() + "' WHERE `room_id` = '" + room.getRoom_id() + "'";
@@ -60,7 +60,7 @@ public class RoomDAO {
 	public boolean deleteRoom(String room_id) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "DELETE FROM `room` WHERE `room_id` = '" + room_id + "'";
