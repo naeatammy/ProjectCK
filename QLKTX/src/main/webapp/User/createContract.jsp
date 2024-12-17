@@ -148,6 +148,8 @@ input[type="submit"]:hover, input[type="reset"]:hover {
 						required /></td>
 				</tr>
 				<tr>
+					<td><label for="contractid">Mã hợp đồng</label></td>
+                    <td><input type="text" name="contractid" value="HD026" required readonly /></td>
 					<td><label for="room">Phòng muốn thuê</label></td>
 					<td><input type="text" name="room" value="A101"
 						required readonly /></td>
