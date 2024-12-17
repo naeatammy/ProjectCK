@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -148,31 +151,33 @@ img {
 <body>
 <h2>LỊCH SỬ THUÊ PHÒNG</h2>
     <div class="form-container">
-        <table>
-            <tr>
-                <td><label for="hoten">Họ tên</label></td>
-                <td><input type="text" id="hoten" name="hoten" value="Lê Tôn Thanh An" disabled></td>
-            </tr>
-            <tr>
-                <td><label for="ngaysinh">Ngày sinh</label></td>
-                <td><input type="text" id="ngaysinh" name="ngaysinh" value="01/01/2004" disabled></td>
-            </tr>
-            <tr>
-                <td><label for="sdt">SĐT</label></td>
-                <td><input type="text" id="sdt" name="sdt" value="0463625848" disabled></td>
-            </tr>
-            <tr>
-                <td><label for="cccd">CCCD</label></td>
-                <td><input type="text" id="cccd" name="cccd" value="04846284573920" disabled></td>
-            </tr>
-        </table>
+        <%
+			User user = (User) request.getAttribute("user");
+		%>
+		<table>
+			<tr>
+				<td><label for="hoten">Họ tên</label></td>
+				<td><input type="text" id="hoten" name="hoten"
+					value="<%=user.getFirstname()%> <%=user.getLastname()%>" disabled></td>
+			</tr>
+			<tr>
+				<td><label for="sdt">SĐT</label></td>
+				<td><input type="text" id="sdt" name="sdt" value="<%=user.getPhonenumber()%>"
+					disabled></td>
+			</tr>
+			<tr>
+				<td><label for="cccd">CCCD</label></td>
+				<td><input type="text" id="cccd" name="cccd"
+					value="<%=user.getCccd()%>" disabled></td>
+			</tr>
+		</table>
     </div>
     <div class="table-container">
         <table>
             <caption>DANH SÁCH CÁC HỢP ĐỒNG</caption>
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th>Mã hợp đồng</th>
                     <th>Từ</th>
                     <th>Đến</th>
                     <th>Thời gian</th>
@@ -182,50 +187,43 @@ img {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>01/03/2024</td>
-                    <td>31/05/2024</td>
-                    <td>3 tháng</td>
-                    <td>A202</td>
-                    <td>Hết hạn</td>
-                    <td>
-                        <button class="extend-btn">Gia hạn</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>28/02/2024</td>
-                    <td>01/12/2023</td>
-                    <td>3 tháng</td>
-                    <td>A202</td>
-                    <td>Hết hạn</td>
-                    <td>
-                        <button class="extend-btn">Gia hạn</button>
-                    </td>
-                </tr>
+                <%
+				ArrayList<Contract> contractList = (ArrayList<Contract>) request.getAttribute("contractList");
+				for(Contract contract : contractList)
+				{
+				%>
+					<tr>
+						<td><%=contract.getContract_id()%></td>
+						<td><%=contract.getStart()%></td>
+						<td><%=contract.getEnd()%></td>
+						<td><%=contract.getDuration()%> tháng</td>
+						<td><%=contract.getRoom_id()%></td>
+						<td><%=contract.getState()%></td>
+						<%
+							if(contract.getState().equals("Chờ phê duyệt")) {
+						%>
+						<td></td>
+						<%
+							} else {
+						%>
+						<td>
+							<button class="extend-btn" onclick="extend('<%=contract.getUser_id()%>', '<%=contract.getRoom_id()%>')">Gia hạn</button>
+						</td>
+						<%
+							}
+						%>
+					</tr>
+				<%
+					}
+				%>
             </tbody>
         </table>
     </div>
 </body>
 <script>
-    function addExtendButtonHandlers() {
-        const extendButtons = document.querySelectorAll('.extend-btn');
-
-        extendButtons.forEach((button, index) => {
-            button.addEventListener('click', () => {
-                const row = button.closest('tr');
-                const room = row.cells[4].textContent.trim();
-                const fromDate = row.cells[1].textContent.trim();
-                const toDate = row.cells[2].textContent.trim();
-
-                const url = `contractExtensionOfUser.jsp`;
-                window.location.href = url;
-            });
-        });
+    function extend(userid, roomid) {
+    	window.location.href = "<%=request.getContextPath()%>/ContractController?action=_extend_&userid=" + userid + "&roomid=" + roomid;
     }
-
-    document.addEventListener('DOMContentLoaded', addExtendButtonHandlers);
 </script>
 
 </html>

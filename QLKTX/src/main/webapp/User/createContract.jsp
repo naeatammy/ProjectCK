@@ -3,6 +3,7 @@
 <%@page import="model.bean.*"%>
 <%@page import="model.dto.*"%>
 <%@page import="java.util.*"%>
+<%@page import="helper.GenerateNewCode"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -132,7 +133,7 @@ input[type="submit"]:hover, input[type="reset"]:hover {
 			User user = (User) request.getAttribute("user");
 			String room_id = (String) request.getAttribute("roomid");
 		%>
-		<form action="<%=request.getContextPath()%>/ContractController?action=" method="">
+		<form action="<%=request.getContextPath()%>/ContractController?action=rendhandle" method="post">
 			<table>
 				<tr>
 					<td><label for="userid">Mã người dùng</label></td>
@@ -176,8 +177,12 @@ input[type="submit"]:hover, input[type="reset"]:hover {
 						required /></td>
 				</tr>
 				<tr>
+					<%
+						ArrayList<String> ex_code = (ArrayList<String>) request.getAttribute("code");
+						String code = new GenerateNewCode().generateNewCode(ex_code);
+					%>
 					<td><label for="contractid">Mã hợp đồng</label></td>
-                    <td><input type="text" name="contractid" value="HD026" required readonly /></td>
+                    <td><input type="text" name="contractid" value="<%=code%>" required readonly /></td>
 					<td><label for="room">Phòng muốn thuê</label></td>
 					<td><input type="text" name="roomid" value="<%=room_id%>"
 						required readonly /></td>

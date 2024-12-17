@@ -35,6 +35,15 @@ public class UserController extends HttpServlet {
 			request.getRequestDispatcher("Admin/showRoomRentalHistory.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("_contracthistory")) {
+			String user_id = request.getParameter("userid");
+			ArrayList<Contract> contractList = contractBO.getByUserID(user_id);
+			User user = userBO.getUserById(user_id);
+			request.setAttribute("user", user);
+			request.setAttribute("contractList", contractList);
+			request.getRequestDispatcher("User/showRoomRentalHistoryOfUser.jsp").forward(request, response);
+			return;
+		}
 		if(action.equals("adduser")) {
 			response.sendRedirect("Admin/addUser.jsp");
 			return;
@@ -59,6 +68,31 @@ public class UserController extends HttpServlet {
 			request.setAttribute("userList", userList);
 			request.getRequestDispatcher("Admin/showAllUser.jsp").forward(request, response);
 			return;
+		}
+		if(action.equals("edituser")) {
+			String user_id = request.getParameter("userid");
+			User user = userBO.getUserById(user_id);
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("User/editUserInformation.jsp").forward(request, response);
+			return;
+		}
+		if(action.equals("edithandle")) {
+			String user_id = (String) request.getSession().getAttribute("userid");
+			String firstname = request.getParameter("firstname");
+			String lastname = request.getParameter("lastname");
+			String phonenumber = request.getParameter("phonenumber");
+			String gender = request.getParameter("gender");
+			String cccd = request.getParameter("cccd");
+			User user = new User(user_id, firstname, lastname, phonenumber, cccd, gender.equals("Nam"));
+			boolean isUpdated = userBO.updateUser(user);
+			if(isUpdated) {
+				System.out.println("Success");
+			}
+			else {
+				System.out.println("Failed");
+			}
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("User/editUserInformation.jsp").forward(request, response);
 		}
 	}
 

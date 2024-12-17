@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,10 +58,14 @@ a {
 	<div class="sidebar">
 		<h3>Xin chào <%=request.getSession().getAttribute("username")%> !</h3>
 		<ul>
-			<li class="active" data-page="rentRoom.jsp">Thuê phòng</li>
-			<li data-page="showRoomRentalHistoryOfUser.jsp">Xem lịch sử
-				thuê phòng</li>
-			<li data-page="editUserInformation.jsp">Thông tin cá nhân</li>
+			<%
+				Calendar calendar = Calendar.getInstance();
+				int month = calendar.get(Calendar.MONTH) + 1;
+				int year = calendar.get(Calendar.YEAR);
+			%>
+			<li class="active" data-page="<%= request.getContextPath() %>/RoomController?action=_viewallroom&month=<%=month%>&year=<%=year%>">Thuê phòng</li>
+			<li data-page="<%=request.getContextPath()%>/UserController?action=_contracthistory&userid=<%=(String) request.getSession().getAttribute("userid")%>">Xem lịch sử thuê phòng</li>
+			<li data-page="<%=request.getContextPath()%>/UserController?action=edituser&userid=<%=(String) request.getSession().getAttribute("userid")%>">Thông tin cá nhân</li>
 			<li id="logout">Đăng xuất</li>
 		</ul>
 	</div>
@@ -82,8 +89,8 @@ a {
                             console.error('Iframe content not found!');
                         }
                     } else {
-                        window.top.location.href = "./login.jsp";
-                        window.top.history.replaceState(null, null, "./login.jsp");
+                        window.top.location.href = "../login.jsp";
+                        window.top.history.replaceState(null, null, "../login.jsp");
                     }
                 });
             });

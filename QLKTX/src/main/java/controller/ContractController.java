@@ -49,6 +49,21 @@ public class ContractController extends HttpServlet {
 			request.getRequestDispatcher("Admin/_contractExtension.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("_extend_")) {
+			String user_id = request.getParameter("userid");
+			String room_id = request.getParameter("roomid");
+			System.out.println(user_id);
+			User user = userBO.getUserById(user_id);
+			ArrayList<String> existingCodes = new ArrayList<String>();
+			for(Contract contract : contractBO.getAllContract()) {
+				existingCodes.add(contract.getContract_id());
+			}
+			request.setAttribute("user", user);
+			request.setAttribute("roomid", room_id);
+			request.setAttribute("code", existingCodes);
+			request.getRequestDispatcher("User/contractExtensionOfUser.jsp").forward(request, response);
+			return;
+		}
 		if(action.equals("addcontract")) {
 			String contract_id = request.getParameter("contractid");
 			String user_id = request.getParameter("userid");
@@ -135,6 +150,35 @@ public class ContractController extends HttpServlet {
 			}
 			return;
 		}
+		if(action.equals("_addcontract_")) {
+			String contract_id = request.getParameter("contractid");
+			String user_id = request.getParameter("userid");
+			String room_id = request.getParameter("roomid");
+			String duration = request.getParameter("duration");
+			String start = request.getParameter("start");
+			String end = request.getParameter("end");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			try {
+				
+				Contract contract = new Contract(contract_id, user_id, room_id, Integer.parseInt(duration), dateFormat.parse(start), dateFormat.parse(end), 
+						"Chờ phê duyệt");
+				boolean isAdded = contractBO.addContract(contract);
+				if(isAdded) {
+					System.out.println("Success");
+				} else {
+					System.out.println("Failed");
+				}
+				ArrayList<Contract> contractList = contractBO.getByUserID(user_id);
+				User user = userBO.getUserById(user_id);
+				request.setAttribute("user", user);
+				request.setAttribute("contractList", contractList);
+				request.getRequestDispatcher("User/showRoomRentalHistoryOfUser.jsp").forward(request, response);
+				return;
+			} catch (Exception e) {
+				System.out.println("Error: " + e);
+			}
+			return;
+		}
 		if(action.equals("_addcontract")) {
 			String contract_id = request.getParameter("contractid");
 			String user_id = request.getParameter("userid");
@@ -183,6 +227,34 @@ public class ContractController extends HttpServlet {
 			}
 			return;
 		}
+		if(action.equals("rendhandle")) {
+			String contract_id = request.getParameter("contractid");
+			String user_id = (String) request.getSession().getAttribute("userid");
+			String room_id = request.getParameter("roomid");
+			String duration = request.getParameter("duration");
+			String start = request.getParameter("start");
+			String end = request.getParameter("end");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			try {
+				Contract contract = new Contract(contract_id, user_id, room_id, Integer.parseInt(duration), dateFormat.parse(start), dateFormat.parse(end), 
+						"Chờ phê duyệt");
+				boolean isAdded = contractBO.addContract(contract);
+				if(isAdded) {
+					System.out.println("Success");
+				} else {
+					System.out.println("Failed");
+				}
+				ArrayList<Contract> contractList = contractBO.getByUserID(user_id);
+				User user = userBO.getUserById(user_id);
+				request.setAttribute("user", user);
+				request.setAttribute("contractList", contractList);
+				request.getRequestDispatcher("User/showRoomRentalHistoryOfUser.jsp").forward(request, response);
+				return;
+			} catch (Exception e) {
+				System.out.println("Error: " + e);
+			}
+			return;
+		}
 		if(action.equals("viewallcontract")) {
 			ArrayList<Contract> contractList = contractBO.getAllContract();
 			ArrayList<ContractDTO> contractDtoList = new ArrayList<ContractDTO>();
@@ -210,8 +282,13 @@ public class ContractController extends HttpServlet {
 			String user_id = (String) request.getSession().getAttribute("userid");
 			System.out.println(user_id);
 			User user = userBO.getUserById(user_id);
+			ArrayList<String> existingCodes = new ArrayList<String>();
+			for(Contract contract : contractBO.getAllContract()) {
+				existingCodes.add(contract.getContract_id());
+			}
 			request.setAttribute("roomid", room_id);
 			request.setAttribute("user", user);
+			request.setAttribute("code", existingCodes);
 			request.getRequestDispatcher("User/createContract.jsp").forward(request, response);
 			return;
 		}
