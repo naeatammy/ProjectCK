@@ -259,37 +259,37 @@ img {
 						<%
 						if (recordDtoList.get(i).isRoom()) {
 						%> <img src="image/tick.png" alt="yes"> <%
- } else {
- %> <img src="image/x.png" alt="no"> <%
- }
- %>
+						 } else {
+						 %> <img src="image/x.png" alt="no"> <%
+						 }
+						 %>
 					</td>
 					<td>
 						<%
 						if (recordDtoList.get(i).isElectric()) {
 						%> <img src="image/tick.png" alt="yes"> <%
- } else {
- %> <img src="image/x.png" alt="no"> <%
- }
- %>
+						 } else {
+						 %> <img src="image/x.png" alt="no"> <%
+						 }
+						 %>
 					</td>
 					<td>
 						<%
 						if (recordDtoList.get(i).isWater()) {
 						%> <img src="image/tick.png" alt="yes"> <%
- } else {
- %> <img src="image/x.png" alt="no"> <%
- }
- %>
+						 } else {
+						 %> <img src="image/x.png" alt="no"> <%
+						 }
+						 %>
 					</td>
 					<td>
 						<%
 						if (recordDtoList.get(i).isWifi()) {
 						%> <img src="image/tick.png" alt="yes"> <%
- } else {
- %> <img src="image/x.png" alt="no"> <%
- }
- %>
+						 } else {
+						 %> <img src="image/x.png" alt="no"> <%
+						 }
+						 %>
 					</td>
 					<td><input type="submit" id="save-btn" class="save-btn" value="Save"></td>
 				</tr>
@@ -310,12 +310,16 @@ img {
 
     let currentDate = new Date();
 	
-    <%String month = (String) request.getAttribute("month");
-String year = (String) request.getAttribute("year");
-if (month != null) {%>
+    <%
+    String month = (String) request.getAttribute("month");
+	String year = (String) request.getAttribute("year");
+	if (month != null) {
+	%>
 		currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);
 		currentDate.setFullYear(<%=Integer.parseInt(year)%>)
-	<%}%>
+	<%
+	}
+	%>
     
     const updateMonthDisplay = () => {
         const monthNames = [
@@ -363,10 +367,10 @@ if (month != null) {%>
             });
         });
 
-        function saveTableState() {
-            const updatedStates = paymentCells.map(cell => ({ src: cell.src, alt: cell.alt }));
-            console.log('Lưu trạng thái:', updatedStates);
-            alert('Trạng thái đã được lưu! (Giả lập - cần thêm logic lưu vào DB)');
+        function saveTableState(userid, roomid, room, electric, water, wifi) {
+            const updatedStates = Array.from(paymentCells).map(cell => ({ src: cell.src, alt: cell.alt }));
+            alert('Trạng thái đã được lưu!');
+            window.location.href = "<%=request.getContextPath()%>/RoomController?action=updaterecord&userid=" + userid + "&roomid=" + roomid + "&room=" + room + "&electric=" + electric + "&water=" + water + "&wifi=" + wifi + "&month=<%=month%>&year=<%=year%>";
         }
 
         function restoreOriginalState() {
@@ -379,7 +383,18 @@ if (month != null) {%>
 
         const saveButtons = document.querySelectorAll('.save-btn');
         saveButtons.forEach((button) => {
-            button.addEventListener('click', saveTableState);
+            button.addEventListener('click', () => {
+            	const row = button.closest('tr');
+            	const userid = row.cells[0].innerText;
+            	const status = {
+                        room: row.cells[5].querySelector('img').alt === 'yes',
+                        electric: row.cells[6].querySelector('img').alt === 'yes',
+                        water: row.cells[7].querySelector('img').alt === 'yes',
+                        wifi: row.cells[8].querySelector('img').alt === 'yes',
+                };
+            	const roomid = "<%=room.getRoom_id()%>";
+            	saveTableState(userid, roomid, status.room, status.electric, status.water, status.wifi);
+            });
         });
 
         const cancelButtons = document.querySelectorAll('.cancel-btn');
