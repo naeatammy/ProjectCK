@@ -22,7 +22,22 @@ public class ContractBO {
 		return contractList;
 	}
 	
+	public Contract getByContractID(String contract_id) {
+		ArrayList<Contract> contractList = contractDAO.getAllContract();
+		Contract rescontract = contractList.get(0);
+		for(Contract contract : contractList) {
+			if(contract.getContract_id().equals(contract_id)) {
+				return contract;
+			}
+		}
+		return rescontract;
+	}
+	
 	public boolean addContract(Contract contract) {
 		return contractDAO.addContract(contract);
+	}
+	
+	public boolean updateContract(Contract contract) {
+		return contractDAO.updateContract(contract);
 	}
 }

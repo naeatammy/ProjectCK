@@ -11,7 +11,7 @@ public class ContractDAO {
 		ArrayList<Contract> contractList = new ArrayList<Contract>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			String sql = "SELECT * FROM contract";
@@ -31,7 +31,7 @@ public class ContractDAO {
 	public boolean addContract(Contract contract) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1:3366/qlktx";
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
 			Connection conn = DriverManager.getConnection(url, "root", "");
 			Statement sm = conn.createStatement();
 			SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,6 +40,21 @@ public class ContractDAO {
             java.sql.Date sqlStartDate = java.sql.Date.valueOf(startFormatted);
             java.sql.Date sqlEndDate = java.sql.Date.valueOf(endFormatted);
 			String sql = "INSERT INTO `contract`(`contract_id`, `user_id`, `room_id`, `duration`, `start`, `end`, `state`) VALUES ('"+contract.getContract_id()+"','"+contract.getUser_id()+"','"+contract.getRoom_id()+"',"+contract.getDuration()+",'"+sqlStartDate+"','"+sqlEndDate+"','"+contract.getState()+"')";
+			int rowAffected = sm.executeUpdate(sql);
+			return rowAffected > 0;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
+	
+	public boolean updateContract(Contract contract) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1:3306/qlktx";
+			Connection conn = DriverManager.getConnection(url, "root", "");
+			Statement sm = conn.createStatement();
+			String sql = "UPDATE `contract` SET `state`='"+contract.getState()+"' WHERE `contract_id`='"+contract.getContract_id()+"'";
 			int rowAffected = sm.executeUpdate(sql);
 			return rowAffected > 0;
 		} catch(Exception e) {

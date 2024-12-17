@@ -90,7 +90,6 @@ input[type="text"] {
 	background-color: #2b91b0;
 }
 
-
 .table-container {
 	margin: 20px auto;
 	overflow-x: auto;
@@ -159,6 +158,40 @@ img {
 	background-color: #2b91b0;
 }
 
+.back-button {
+	width: 48%;
+	padding: 10px;
+	font-size: 1rem;
+	color: white;
+	background-color: #3ea4c6;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.back-button:hover {
+	background-color: #2a6c81;
+}
+
+.back-button {
+	position: absolute;
+	top: 20px;
+	left: 10px;
+	padding: 3px 8px;
+	font-size: 0.8rem;
+	width: 10vw !important;
+	color: white;
+	background-color: #3ea4c6;
+	border-radius: 5px;
+	text-decoration: none;
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s ease;
+}
+
 @media ( max-width : 768px) {
 	table {
 		display: block;
@@ -191,9 +224,23 @@ img {
 		font-size: 18px;
 	}
 }
+
+@media ( max-width : 600px) {
+	back-button {
+		width: 100%;
+	}
+}
 </style>
 </head>
 <body>
+	<%
+	Calendar calendar = Calendar.getInstance();
+	int month_now = calendar.get(Calendar.MONTH) + 1;
+	int year_now = calendar.get(Calendar.YEAR);
+	%>
+	<a
+		href="<%=request.getContextPath()%>/RoomController?action=viewallroom&month=<%=month_now%>&year=<%=year_now%>"
+		class="back-button">← Back</a>
 	<h2>CHI TIẾT PHÒNG</h2>
 	<div class="form-container">
 		<%
@@ -259,39 +306,40 @@ img {
 						<%
 						if (recordDtoList.get(i).isRoom()) {
 						%> <img src="image/tick.png" alt="yes"> <%
-						 } else {
-						 %> <img src="image/x.png" alt="no"> <%
-						 }
-						 %>
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
 					<td>
 						<%
 						if (recordDtoList.get(i).isElectric()) {
 						%> <img src="image/tick.png" alt="yes"> <%
-						 } else {
-						 %> <img src="image/x.png" alt="no"> <%
-						 }
-						 %>
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
 					<td>
 						<%
 						if (recordDtoList.get(i).isWater()) {
 						%> <img src="image/tick.png" alt="yes"> <%
-						 } else {
-						 %> <img src="image/x.png" alt="no"> <%
-						 }
-						 %>
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
 					<td>
 						<%
 						if (recordDtoList.get(i).isWifi()) {
 						%> <img src="image/tick.png" alt="yes"> <%
-						 } else {
-						 %> <img src="image/x.png" alt="no"> <%
-						 }
-						 %>
+ } else {
+ %> <img src="image/x.png" alt="no"> <%
+ }
+ %>
 					</td>
-					<td><input type="submit" id="save-btn" class="save-btn" value="Save"></td>
+					<td><input type="submit" id="save-btn" class="save-btn"
+						value="Save"></td>
 				</tr>
 				<%
 				}
@@ -310,16 +358,12 @@ img {
 
     let currentDate = new Date();
 	
-    <%
-    String month = (String) request.getAttribute("month");
-	String year = (String) request.getAttribute("year");
-	if (month != null) {
-	%>
+    <%String month = (String) request.getAttribute("month");
+String year = (String) request.getAttribute("year");
+if (month != null) {%>
 		currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);
 		currentDate.setFullYear(<%=Integer.parseInt(year)%>)
-	<%
-	}
-	%>
+	<%}%>
     
     const updateMonthDisplay = () => {
         const monthNames = [
