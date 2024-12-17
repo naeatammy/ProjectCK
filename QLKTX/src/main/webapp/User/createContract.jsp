@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -117,54 +120,79 @@ input[type="submit"]:hover, input[type="reset"]:hover {
 </style>
 </head>
 <body>
-	<a href="rentRoom.jsp" class="back-button">← Back</a>
+	<%
+		Calendar calendar = Calendar.getInstance();
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int year = calendar.get(Calendar.YEAR);
+	%>
+	<a href="<%= request.getContextPath() %>/RoomController?action=_viewallroom&month=<%=month%>&year=<%=year%>" class="back-button">← Back</a>
 	<div class="form-container">
 		<h2>Tạo hợp đồng mới</h2>
-		<form action="" method="">
+		<%
+			User user = (User) request.getAttribute("user");
+			String room_id = (String) request.getAttribute("roomid");
+		%>
+		<form action="<%=request.getContextPath()%>/ContractController?action=" method="">
 			<table>
 				<tr>
 					<td><label for="userid">Mã người dùng</label></td>
 					<td colspan="3"><input type="text" name="userid" id="userid"
-						value="1002220051" required></td>
+						value="<%=user.getUser_id()%>" required></td>
 				</tr>
 				<tr>
 					<td><label for="ho">Họ</label></td>
-					<td><input type="text" name="ho" value="Trần Văn" required /></td>
+					<td><input type="text" name="firstname" value="<%=user.getFirstname()%>" required /></td>
 					<td><label for="ten">Tên</label></td>
-					<td><input type="text" name="ten" value="An" required></td>
+					<td><input type="text" name="lastname" value="<%=user.getLastname()%>" required></td>
 				</tr>
 				<tr>
 					<td><label for="sdt">Số điện thoại</label></td>
-					<td><input type="text" name="sdt" value="0123456789" required /></td>
+					<td><input type="text" name="phonenumber" value="<%=user.getPhonenumber()%>" required /></td>
 					<td><label for="gioitinh">Giới tính</label></td>
-					<td><select name="gioitinh">
-							<option value="Nam">Nam</option>
-							<option value="Nữ">Nữ</option>
-					</select></td>
+					<td>
+                        <select name="" id="loaiphong" required disabled>
+                        	<%
+                        		if(user.isMale())
+                        		{
+                        	%>
+	                            <option value="Nam" selected>Nam</option>
+	                            <option value="Nữ">Nữ</option>
+                            <%
+                        		} else {
+                        			
+                            %>
+	                            <option value="Nam">Nam</option>
+	                            <option value="Nữ" selected>Nữ</option>
+                            <%
+                        		}
+                            %>
+                        </select>
+                        <input type="hidden" name="gender" value="<%=user.isMale() ? "Nam" : "Nữ"%>" />
+                    </td>
 				</tr>
 				<tr>
 					<td><label for="cccd">CCCD</label></td>
-					<td><input type="text" name="cccd" value="04825374823940"
+					<td><input type="text" name="cccd" value="<%=user.getCccd()%>"
 						required /></td>
 				</tr>
 				<tr>
 					<td><label for="room">Phòng muốn thuê</label></td>
-					<td><input type="text" name="room" value="A101"
+					<td><input type="text" name="roomid" value="<%=room_id%>"
 						required readonly /></td>
 				</tr>
 				<tr>
 					<td><label for="month-start">Tháng bắt đầu</label></td>
 					<td><input type="text" name="month-start" value="" required
 						placeholder="mm/yyyy" /></td>
-					<td><label for="sothang">Số tháng thuê</label></td>
-					<td><input type="text" name="sothang" value="" required
+					<td><label for="duration">Số tháng thuê</label></td>
+					<td><input type="text" name="duration" value="" required
 						placeholder="Ví dụ: 3" /></td>
 				</tr>
 				<tr>
-					<td><label for="from">Từ</label></td>
-					<td><input type="text" name="from" value="" required /></td>
+					<td><label for="start">Từ</label></td>
+					<td><input type="text" name="start" value="" required /></td>
 					<td><label for="to">Đến</label></td>
-					<td><input type="text" name="to" value="" required /></td>
+					<td><input type="text" name="end" value="" required /></td>
 				</tr>
 				<tr>
 					<td colspan="4"><input type="submit" value="Tạo mới" /><input
@@ -177,9 +205,9 @@ input[type="submit"]:hover, input[type="reset"]:hover {
 <script>
     function updateContractDates() {
         const monthStartInput = document.getElementsByName('month-start')[0];
-        const durationInput = document.getElementsByName('sothang')[0];
-        const fromInput = document.getElementsByName('from')[0];
-        const toInput = document.getElementsByName('to')[0];
+        const durationInput = document.getElementsByName('duration')[0];
+        const startInput = document.getElementsByName('start')[0];
+        const endInput = document.getElementsByName('end')[0];
 
         const monthStart = monthStartInput.value;
         const duration = parseInt(durationInput.value);
@@ -195,8 +223,8 @@ input[type="submit"]:hover, input[type="reset"]:hover {
             String(date.getMonth() + 1).padStart(2, '0') + '/' +
             date.getFullYear();
 
-            fromInput.value = formatDate(startDate);
-            toInput.value = formatDate(endDate);
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
         }
     }
 
@@ -207,7 +235,7 @@ input[type="submit"]:hover, input[type="reset"]:hover {
         const sdtInput = document.getElementsByName('sdt')[0];
         const cccdInput = document.getElementsByName('cccd')[0];
         const monthStartInput = document.getElementsByName('month-start')[0];
-        const durationInput = document.getElementsByName('sothang')[0];
+        const durationInput = document.getElementsByName('duration')[0];
 
         const userIdRegex = /^\d{10}$/;
         if (!userIdRegex.test(useridInput.value)) {
@@ -275,6 +303,6 @@ input[type="submit"]:hover, input[type="reset"]:hover {
         }
     });
     document.getElementsByName('month-start')[0].addEventListener('input', updateContractDates);
-    document.getElementsByName('sothang')[0].addEventListener('input', updateContractDates);
+    document.getElementsByName('duration')[0].addEventListener('input', updateContractDates);
 </script>
 </html>

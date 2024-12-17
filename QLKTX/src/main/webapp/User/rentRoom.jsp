@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="model.bean.*"%>
+<%@page import="model.dto.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -334,32 +337,25 @@ tbody tr:hover {
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>A101</td>
-							<td>Nam</td>
-							<td>6</td>
-							<td>4/6</td>
-							<td>700000</td>
-							<td><button class="rent-btn">Thuê</button></td>
-						</tr>
-						<tr>
-							<td>A102</td>
-							<td>Nữ</td>
-							<td>4</td>
-							<td>Full</td>
-							<td>500000</td>
-							<td><button class="rent-btn">Thuê</button></td>
-						</tr>
-						<tr>
-							<td>A103</td>
-							<td>Nam</td>
-							<td>4</td>
-							<td>0/6</td>
-							<td>500000</td>
-							<td><button class="rent-btn">Thuê</button></td>
-						</tr>
+						<%
+						ArrayList<RoomDTO> roomList = (ArrayList<RoomDTO>) request.getAttribute("roomDtoList");
+						for(int i = 0; i < roomList.size(); i++)
+						{
+						%>
+							<tr>
+								<td><%=roomList.get(i).getRoom_id()%></td>
+								<td><%=roomList.get(i).getType()%></td>
+								<td><%=roomList.get(i).getCapacity()%></td>
+								<td><%=roomList.get(i).getState()%></td>
+								<td><%=roomList.get(i).getPrice()%></td>
+								<td><button class="rent-btn" onclick="rend('<%=roomList.get(i).getRoom_id()%>')">Thuê</button></td>
+							</tr>
+						<%
+							}
+						%>
 					</tbody>
 				</table>
+							<
 			</div>
 		</div>
 	</div>
@@ -369,8 +365,19 @@ tbody tr:hover {
         const prevMonthBtn = document.getElementById('prev-month');
         const nextMonthBtn = document.getElementById('next-month');
 
-        let currentDate = new Date();
-
+		let currentDate = new Date();
+        
+        <%
+        	String month = (String) request.getAttribute("month");
+        	String year = (String) request.getAttribute("year");
+        	if(month != null) {
+        %>
+        	currentDate.setMonth(<%=Integer.parseInt(month) - 1%>);
+        	currentDate.setFullYear(<%=Integer.parseInt(year)%>)
+       	<%
+        	}
+       	%>
+        
         const updateMonthDisplay = () => {
             const monthNames = [
                 "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5",
@@ -379,16 +386,24 @@ tbody tr:hover {
             ];
             currentMonthElement.textContent = monthNames[currentDate.getMonth()] + ", " + currentDate.getFullYear();
         };
+        
+        
 
         prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
-            updateMonthDisplay();
+        	window.location.href = "<%= request.getContextPath() %>/RoomController?action=_viewallroom&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
+
+            
         });
 
         nextMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
-            updateMonthDisplay();
+        	window.location.href = "<%= request.getContextPath() %>/RoomController?action=_viewallroom&month=" + (currentDate.getMonth() + 1) + "&year=" + currentDate.getFullYear();
         });
+        
+        function rend(roomid) {
+        	window.location.href = "<%=request.getContextPath()%>/ContractController?action=rend&roomid=" + roomid;
+        }
 
         function setupTableSortingAndSearch() {
             const tableBody = document.querySelector('tbody');
@@ -448,20 +463,6 @@ tbody tr:hover {
             updateMonthDisplay();
         });
 
-        const rentButtons = document.querySelectorAll('.rent-btn');
-        rentButtons.forEach(button => {
-            button.addEventListener('click', event => {
-                event.stopPropagation();
-                const row = button.closest('tr');
-                const roomNumber = row.cells[0].textContent.trim();
-                const status = row.cells[3].textContent.trim(); 
-                if (status === 'Full') {
-                    alert('Phòng này không còn trống để thuê!');
-                } else {
-                    window.location.href = `createContract.jsp?room=${roomNumber}`;
-                }   
-            }); 
-        });
 
     </script>
 </html>

@@ -19,6 +19,15 @@ public class UserBO {
 		return resUser;
 	}
 	
+	public String getIdByUsername(String username) {
+		String user_id = new String();
+		for (User user : userDAO.getAllUserLG()) {
+			System.out.println(user.getUsername());
+			if(user.getUsername().equals(username)) return user.getUser_id();
+		}
+		return user_id;
+	}
+	
 	public boolean updateUser(User user) {
 		return userDAO.updateUser(user);
 	}

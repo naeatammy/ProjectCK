@@ -53,7 +53,7 @@ a {
 </head>
 <body>
 	<div class="sidebar">
-		<h3>Xin chào @anle0409 !</h3>
+		<h3>Xin chào <%=request.getSession().getAttribute("username")%> !</h3>
 		<ul>
 			<li class="active" data-page="rentRoom.jsp">Thuê phòng</li>
 			<li data-page="showRoomRentalHistoryOfUser.jsp">Xem lịch sử

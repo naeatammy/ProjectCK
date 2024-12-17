@@ -205,6 +205,16 @@ public class ContractController extends HttpServlet {
 			request.getRequestDispatcher("Admin/showOneContract.jsp").forward(request, response);
 			return;
 		}
+		if(action.equals("rend")) {
+			String room_id = request.getParameter("roomid");
+			String user_id = (String) request.getSession().getAttribute("userid");
+			System.out.println(user_id);
+			User user = userBO.getUserById(user_id);
+			request.setAttribute("roomid", room_id);
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("User/createContract.jsp").forward(request, response);
+			return;
+		}
 	}
 
 
